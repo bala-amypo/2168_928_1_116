@@ -13,5 +13,26 @@ import com.example.demo.service.Studentservice;
 public class Studentctl {
 
     @Autowired
+    privateStudentservice ser;
+
+    //post
+    @PostMapping("/add")
+    public Studententity addStudent(@RequestBody studententity st){
+        return ser.saveData(st);
+    }
+
+    //GET ALL
+    @GetMapping("/getall")
+    public Collection<Studententity> getAllStudents(){
+        return ser.saveData(st);
+    }
+
+    //GET ALL
+    @GetMapping("/get/{id}")
+    public Studententity getStudentById(@PathVariable int id){
+        return ser.getById(id);
+    }
+
+    
 }
-}
+
