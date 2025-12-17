@@ -33,6 +33,12 @@ public class Studentctl {
         return ser.getById(id);
     }
 
-    
+    //PUT(UPDATE)
+    @PutMapping("/update/{id}")
+    public Studententity updateStudent(
+        @PathVariable int id,
+        @RequestBody Studententity st) {
+            return ser.update(id, st);
+        }
 }
 
