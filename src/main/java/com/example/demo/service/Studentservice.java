@@ -8,7 +8,8 @@ import com.example.demo.entity.Studententity;
 public interface StudentService {
     studententity saveData(Studententity st);
     Studententity insertStudententity(Studententity newStudent);
-    List<Studententity>getOneStudent(Long id);
+    List<Studententity>getAllStudententity();
+    Optional<Studententity>getOneStudent(Login id);
     void deleteStudent(Long id);
-    Student insertStudententity
+    Student insertStudententity(Student st);
 }
