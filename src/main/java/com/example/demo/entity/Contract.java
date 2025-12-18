@@ -20,5 +20,5 @@ public class Contract {
     private BigDecimal baseContractValue;
     private String status;
 
-    // getters & setters
+   
 }
