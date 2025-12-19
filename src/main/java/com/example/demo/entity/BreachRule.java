@@ -3,22 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-public class BreachRule {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String ruleName;
-    private String description;
-    private Double penaltyAmount;
-    private boolean active = true;
-
-  
-}
-
-//@Entity
-//@Table(name = "breach_rules")
+@Table(name = "breach_rules")
 public class BreachRule {
 
     @Id
