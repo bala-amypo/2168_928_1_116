@@ -1,16 +1,28 @@
-package com.example.demo.entity;
+package com.example.demo.service.impl;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.BreachRule;
+import com.example.demo.repository.BreachRuleRepository;
+import com.example.demo.service.BreachRuleService;
+import org.springframework.stereotype.Service;
 
-@Entity
+import java.util.List;
+
+@Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
+    private final BreachRuleRepository repository;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public BreachRuleServiceImpl(BreachRuleRepository repository) {
+        this.repository = repository;
+    }
 
-    private Integer delayDays;
-    private Double penaltyPercentage;
+    @Override
+    public BreachRule save(BreachRule rule) {
+        return repository.save(rule);
+    }
 
+    @Override
+    public List<BreachRule> getAll() {
+        return repository.findAll();
+    }
 }
