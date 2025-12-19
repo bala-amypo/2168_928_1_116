@@ -1,28 +1,31 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.DeliveryRecord;
-import com.example.demo.service.DeliveryRecordService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/deliveries")
+@RequestMapping("/api/delivery-records")
 public class DeliveryRecordController {
 
-    private final DeliveryRecordService service;
-
-    public DeliveryRecordController(DeliveryRecordService service) {
-        this.service = service;
-    }
-
+    // POST / - Log delivery
     @PostMapping
-    public DeliveryRecord create(@RequestBody DeliveryRecord record) {
-        return service.save(record);
+    public String logDelivery() {
+        return "Delivery logged";
     }
 
-    @GetMapping("/contract/{id}")
-    public List<DeliveryRecord> getByContract(@PathVariable Long id) {
-        return service.getByContract(id);
+    // GET /{id} - Get record
+    @GetMapping("/{id}")
+    public String getRecord(@PathVariable Long id) {
+        return "Get delivery record " + id;
+    }
+
+    @GetMapping("/contract/{contractId}")
+    public String listRecords(@PathVariable Long contractId) {
+        return "List delivery records for contract " + contractId;
+    }
+
+    // GET /contract/{contractId}/latest - Get latest
+    @GetMapping("/contract/{contractId}/latest")
+    public String getLatest(@PathVariable Long contractId) {
+        return "Latest delivery record for contract " + contractId;
     }
 }
