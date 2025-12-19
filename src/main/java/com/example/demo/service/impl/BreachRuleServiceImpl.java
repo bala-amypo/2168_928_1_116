@@ -17,18 +17,18 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     }
 
     @Override
-    public BreachRule createRule(BreachRule breachRule) {
+    public void createRule(BreachRule breachRule) {
         breachRule.setActive(true);
-        return breachRuleRepository.save(breachRule);
+        breachRuleRepository.save(breachRule);
     }
 
     @Override
-    public BreachRule updateRule(Long id, BreachRule breachRule) {
+    public void updateRule(Long id, BreachRule breachRule) {
         BreachRule existing = getRuleById(id);
         existing.setRuleName(breachRule.getRuleName());
         existing.setDescription(breachRule.getDescription());
         existing.setPenaltyAmount(breachRule.getPenaltyAmount());
-        return breachRuleRepository.save(existing);
+        breachRuleRepository.save(existing);
     }
 
     @Override
