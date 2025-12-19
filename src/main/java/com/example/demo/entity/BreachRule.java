@@ -10,12 +10,23 @@ public class BreachRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer delayDays;
+    @Column(name = "rule_name")
+    private String ruleName;
 
-    private Double penaltyPercentage;
+    @Column(name = "description")
+    private String description;
 
+    @Column(name = "penalty_amount")
+    private Double penaltyAmount;
+
+    @Column(name = "active")
+    private boolean active = true;
+
+    // ✅ No-args constructor
     public BreachRule() {
     }
+
+    // ✅ Getters & Setters (VERY IMPORTANT)
 
     public Long getId() {
         return id;
@@ -25,19 +36,35 @@ public class BreachRule {
         this.id = id;
     }
 
-    public Integer getDelayDays() {
-        return delayDays;
+    public String getRuleName() {
+        return ruleName;
     }
 
-    public void setDelayDays(Integer delayDays) {
-        this.delayDays = delayDays;
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 
-    public Double getPenaltyPercentage() {
-        return penaltyPercentage;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPenaltyPercentage(Double penaltyPercentage) {
-        this.penaltyPercentage = penaltyPercentage;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getPenaltyAmount() {
+        return penaltyAmount;
+    }
+
+    public void setPenaltyAmount(Double penaltyAmount) {
+        this.penaltyAmount = penaltyAmount;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
