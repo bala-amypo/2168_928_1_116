@@ -3,30 +3,18 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "breach_rules")
 public class BreachRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rule_name")
     private String ruleName;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "penalty_amount")
     private Double penaltyAmount;
+    private boolean active;
 
-    @Column(name = "active")
-    private boolean active = true;
-
-    // ✅ No-args constructor
-    public BreachRule() {
-    }
-
-    // ✅ Getters & Setters (VERY IMPORTANT)
+    public BreachRule() {}
 
     public Long getId() {
         return id;

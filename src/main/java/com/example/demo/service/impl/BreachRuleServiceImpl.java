@@ -10,42 +10,47 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    private final BreachRuleRepository breachRuleRepository;
+    private final BreachRuleRepository repository;
 
-    public BreachRuleServiceImpl(BreachRuleRepository breachRuleRepository) {
-        this.breachRuleRepository = breachRuleRepository;
+    public BreachRuleServiceImpl(BreachRuleRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public void createRule(BreachRule breachRule) {
+    public BreachRule createRule(BreachRule breachRule) {
         breachRule.setActive(true);
-        breachRuleRepository.save(breachRule);
+        return repository.save(breachRule);
     }
 
     @Override
-    public void updateRule(Long id, BreachRule breachRule) {
-        BreachRule existing = getRuleById(id);
+    public BreachRule updateRule(Long id, BreachRule breachRule) {
+        BreachRule existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
         existing.setRuleName(breachRule.getRuleName());
         existing.setDescription(breachRule.getDescription());
         existing.setPenaltyAmount(breachRule.getPenaltyAmount());
-        breachRuleRepository.save(existing);
+
+        return repository.save(existing);
     }
 
     @Override
     public BreachRule getRuleById(Long id) {
-        return breachRuleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Breach rule not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
     }
 
     @Override
     public List<BreachRule> getAllRules() {
-        return breachRuleRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public void deactivateRule(Long id) {
-        BreachRule rule = getRuleById(id);
+        BreachRule rule = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
         rule.setActive(false);
-        breachRuleRepository.save(rule);
+        repository.save(rule);
     }
 }

@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.BreachRule;
+import com.example.demo.service.BreachRuleService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/breach-rules")
 public class BreachRuleController {
@@ -9,16 +17,14 @@ public class BreachRuleController {
     }
 
     @PostMapping
-    public String createRule(@RequestBody BreachRule breachRule) {
-        breachRuleService.createRule(breachRule);
-        return "Breach rule created";
+    public BreachRule createRule(@RequestBody BreachRule breachRule) {
+        return breachRuleService.createRule(breachRule);
     }
 
     @PutMapping("/{id}")
-    public String updateRule(@PathVariable Long id,
-                             @RequestBody BreachRule breachRule) {
-        breachRuleService.updateRule(id, breachRule);
-        return "Breach rule updated";
+    public BreachRule updateRule(@PathVariable Long id,
+                                 @RequestBody BreachRule breachRule) {
+        return breachRuleService.updateRule(id, breachRule);
     }
 
     @GetMapping("/{id}")
@@ -32,8 +38,7 @@ public class BreachRuleController {
     }
 
     @PutMapping("/{id}/deactivate")
-    public String deactivateRule(@PathVariable Long id) {
+    public void deactivateRule(@PathVariable Long id) {
         breachRuleService.deactivateRule(id);
-        return "Breach rule deactivated";
     }
 }
