@@ -1,38 +1,28 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.BreachReport;
-import com.example.demo.service.BreachReportService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/breach-reports")
+@RequestMapping("/api/reports")
 public class BreachReportController {
 
-    private final BreachReportService service;
-
-    public BreachReportController(BreachReportService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public BreachReport create(@RequestBody BreachReport report) {
-        return service.save(report);
-    }
-
-    @GetMapping
-    public List<BreachReport> getAll() {
-        return service.getAll();
+    @PostMapping("/generate/{contractId}")
+    public String generateReport(@PathVariable Long contractId) {
+        return "Breach report generated for contract " + contractId;
     }
 
     @GetMapping("/{id}")
-    public BreachReport getById(@PathVariable Long id) {
-        return service.getById(id);
+    public String getReport(@PathVariable Long id) {
+        return "Get breach report " + id;
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    @GetMapping("/contract/{contractId}")
+    public String listReportsByContract(@PathVariable Long contractId) {
+        return "List breach reports for contract " + contractId;
+    }
+
+    @GetMapping
+    public String listAllReports() {
+        return "List all breach reports";
     }
 }
