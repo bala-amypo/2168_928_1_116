@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.BreachRule;
 import com.example.demo.service.BreachRuleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,28 +18,39 @@ public class BreachRuleController {
     }
 
     @PostMapping
-    public BreachRule createRule(@RequestBody BreachRule breachRule) {
-        return breachRuleService.createRule(breachRule);
+    public ResponseEntity<BreachRule> createRule(
+            @RequestBody BreachRule breachRule) {
+        return ResponseEntity.ok(
+                breachRuleService.createRule(breachRule)
+        );
     }
 
     @PutMapping("/{id}")
-    public BreachRule updateRule(@PathVariable Long id,
-                                 @RequestBody BreachRule breachRule) {
-        return breachRuleService.updateRule(id, breachRule);
+    public ResponseEntity<BreachRule> updateRule(
+            @PathVariable Long id,
+            @RequestBody BreachRule breachRule) {
+        return ResponseEntity.ok(
+                breachRuleService.updateRule(id, breachRule)
+        );
     }
 
     @GetMapping("/{id}")
-    public BreachRule getRule(@PathVariable Long id) {
-        return breachRuleService.getRuleById(id);
+    public ResponseEntity<BreachRule> getRule(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                breachRuleService.getRuleById(id)
+        );
     }
 
     @GetMapping
-    public List<BreachRule> getAllRules() {
-        return breachRuleService.getAllRules();
+    public ResponseEntity<List<BreachRule>> getAllRules() {
+        return ResponseEntity.ok(
+                breachRuleService.getAllRules()
+        );
     }
 
     @PutMapping("/{id}/deactivate")
-    public void deactivateRule(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateRule(@PathVariable Long id) {
         breachRuleService.deactivateRule(id);
+        return ResponseEntity.noContent().build();
     }
 }

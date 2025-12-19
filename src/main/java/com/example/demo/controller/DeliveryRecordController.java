@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.DeliveryRecord;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,22 +9,27 @@ import org.springframework.web.bind.annotation.*;
 public class DeliveryRecordController {
 
     @PostMapping
-    public String logDelivery() {
-        return "Delivery logged";
+    public ResponseEntity<DeliveryRecord> logDelivery(
+            @RequestBody DeliveryRecord record) {
+        return ResponseEntity.ok(record);
     }
 
     @GetMapping("/{id}")
-    public String getRecord(@PathVariable Long id) {
-        return "Get delivery record " + id;
+    public ResponseEntity<String> getRecord(@PathVariable Long id) {
+        return ResponseEntity.ok("Get delivery record " + id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public String listRecords(@PathVariable Long contractId) {
-        return "List delivery records for contract " + contractId;
+    public ResponseEntity<String> listRecords(@PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "List delivery records for contract " + contractId
+        );
     }
 
     @GetMapping("/contract/{contractId}/latest")
-    public String getLatest(@PathVariable Long contractId) {
-        return "Latest delivery record for contract " + contractId;
+    public ResponseEntity<String> getLatest(@PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "Latest delivery record for contract " + contractId
+        );
     }
 }

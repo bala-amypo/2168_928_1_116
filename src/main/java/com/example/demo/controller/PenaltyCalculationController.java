@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,17 +8,23 @@ import org.springframework.web.bind.annotation.*;
 public class PenaltyCalculationController {
 
     @PostMapping("/calculate/{contractId}")
-    public String calculatePenalty(@PathVariable Long contractId) {
-        return "Penalty calculated for contract " + contractId;
+    public ResponseEntity<String> calculatePenalty(
+            @PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "Penalty calculated for contract " + contractId
+        );
     }
 
     @GetMapping("/{id}")
-    public String getCalculation(@PathVariable Long id) {
-        return "Get penalty calculation " + id;
+    public ResponseEntity<String> getCalculation(@PathVariable Long id) {
+        return ResponseEntity.ok("Get penalty calculation " + id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public String listCalculations(@PathVariable Long contractId) {
-        return "List penalty calculations for contract " + contractId;
+    public ResponseEntity<String> listCalculations(
+            @PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "List penalty calculations for contract " + contractId
+        );
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Contract;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,27 +9,31 @@ import org.springframework.web.bind.annotation.*;
 public class ContractController {
 
     @PostMapping
-    public String createContract() {
-        return "Create contract";
+    public ResponseEntity<Contract> createContract(
+            @RequestBody Contract contract) {
+        return ResponseEntity.ok(contract);
     }
 
     @PutMapping("/{id}")
-    public String updateContract(@PathVariable Long id) {
-        return "Update contract " + id;
+    public ResponseEntity<Contract> updateContract(
+            @PathVariable Long id,
+            @RequestBody Contract contract) {
+        contract.setId(id);
+        return ResponseEntity.ok(contract);
     }
 
     @GetMapping("/{id}")
-    public String getContract(@PathVariable Long id) {
-        return "Get contract " + id;
+    public ResponseEntity<String> getContract(@PathVariable Long id) {
+        return ResponseEntity.ok("Get contract " + id);
     }
 
     @GetMapping
-    public String listContracts() {
-        return "List all contracts";
+    public ResponseEntity<String> listContracts() {
+        return ResponseEntity.ok("List all contracts");
     }
 
     @PutMapping("/{id}/update-status")
-    public String recomputeStatus(@PathVariable Long id) {
-        return "Recompute status " + id;
+    public ResponseEntity<String> recomputeStatus(@PathVariable Long id) {
+        return ResponseEntity.ok("Recompute status " + id);
     }
 }

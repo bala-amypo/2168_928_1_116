@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,22 +8,26 @@ import org.springframework.web.bind.annotation.*;
 public class BreachReportController {
 
     @PostMapping("/generate/{contractId}")
-    public String generateReport(@PathVariable Long contractId) {
-        return "Breach report generated for contract " + contractId;
+    public ResponseEntity<String> generateReport(@PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "Breach report generated for contract " + contractId
+        );
     }
 
     @GetMapping("/{id}")
-    public String getReport(@PathVariable Long id) {
-        return "Get breach report " + id;
+    public ResponseEntity<String> getReport(@PathVariable Long id) {
+        return ResponseEntity.ok("Get breach report " + id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public String listReportsByContract(@PathVariable Long contractId) {
-        return "List breach reports for contract " + contractId;
+    public ResponseEntity<String> listReportsByContract(@PathVariable Long contractId) {
+        return ResponseEntity.ok(
+                "List breach reports for contract " + contractId
+        );
     }
 
     @GetMapping
-    public String listAllReports() {
-        return "List all breach reports";
+    public ResponseEntity<String> listAllReports() {
+        return ResponseEntity.ok("List all breach reports");
     }
 }
