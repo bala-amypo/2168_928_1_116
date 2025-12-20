@@ -1,11 +1,15 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "penalty_calculation")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PenaltyCalculation {
 
     @Id
@@ -26,46 +30,4 @@ public class PenaltyCalculation {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date calculatedAt = new Date();
-
-    // ===== GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public Contract getContract() {
-        return contract;
-    }
-
-    public void setContract(Contract contract) {
-        this.contract = contract;
-    }
-
-    public int getDaysDelayed() {
-        return daysDelayed;
-    }
-
-    public void setDaysDelayed(int daysDelayed) {
-        this.daysDelayed = daysDelayed;
-    }
-
-    public BigDecimal getCalculatedPenalty() {
-        return calculatedPenalty;
-    }
-
-    public void setCalculatedPenalty(BigDecimal calculatedPenalty) {
-        this.calculatedPenalty = calculatedPenalty;
-    }
-
-    public BreachRule getAppliedRule() {
-        return appliedRule;
-    }
-
-    public void setAppliedRule(BreachRule appliedRule) {
-        this.appliedRule = appliedRule;
-    }
-
-    public Date getCalculatedAt() {
-        return calculatedAt;
-    }
 }
