@@ -9,4 +9,3 @@ public interface BreachReportRepository
 
     List<BreachReport> findByPenaltyCalculation_Contract_Id(Long contractId);
 }
-find 
