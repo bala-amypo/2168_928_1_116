@@ -1,34 +1,56 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.BreachReport;
+import com.example.demo.entity.PenaltyCalculation;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachReportRepository;
+import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.BreachReportService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class BreachReportServiceImpl implements BreachReportService {
 
-    private final BreachReportRepository repository;
+    private final BreachReportRepository reportRepo;
+    private final PenaltyCalculationRepository calcRepo;
 
-    public BreachReportServiceImpl(BreachReportRepository repository) {
-        this.repository = repository;
+    public BreachReportServiceImpl(
+            BreachReportRepository reportRepo,
+            PenaltyCalculationRepository calcRepo) {
+        this.reportRepo = reportRepo;
+        this.calcRepo = calcRepo;
     }
 
-    public BreachReport save(BreachReport report) {
-        return repository.save(report);
+    @Override
+    public BreachReport generateReport(Long contractId) {
+
+        PenaltyCalculation calc = calcRepo
+                .findTopByContractIdOrderByCalculatedAtDesc(contractId)
+                .orElseThrow(() -> new BadRequestException("No penalty calculation"));
+
+        BreachReport report = new BreachReport();
+        report.setContract(calc.getContract());
+        report.setDaysDelayed(calc.getDaysDelayed());
+        report.setPenaltyAmount(calc.getCalculatedPenalty());
+        report.setRemarks("Auto generated");
+
+        return reportRepo.save(report);
     }
 
-    public List<BreachReport> getAll() {
-        return repository.findAll();
+    @Override
+    public BreachReport getReportById(Long id) {
+        return reportRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
-    public BreachReport getById(Long id) {
-        return repository.findById(id).orElse(null);
+    @Override
+    public List<BreachReport> getReportsForContract(Long contractId) {
+        return reportRepo.findByContractId(contractId);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Override
+    public List<BreachReport> getAllReports() {
+        return reportRepo.findAll();
     }
 }

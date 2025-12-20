@@ -4,9 +4,8 @@ import com.example.demo.entity.BreachReport;
 import java.util.List;
 
 public interface BreachReportService {
-
-    BreachReport save(BreachReport report);
-    List<BreachReport> getAll();
-    BreachReport getById(Long id);
-    void delete(Long id);
+    BreachReport generateReport(Long contractId);
+    BreachReport getReportById(Long id);
+    List<BreachReport> getReportsForContract(Long contractId);
+    List<BreachReport> getAllReports();
 }
