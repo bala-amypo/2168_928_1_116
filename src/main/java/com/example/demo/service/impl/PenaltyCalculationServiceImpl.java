@@ -6,10 +6,15 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.PenaltyCalculationService;
 
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
+@Service
 public class PenaltyCalculationServiceImpl implements PenaltyCalculationService {
 
     private final ContractRepository contractRepo;
@@ -32,7 +37,7 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
     public PenaltyCalculation calculatePenalty(Long contractId) {
 
         Contract contract = contractRepo.findById(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
 
         DeliveryRecord delivery = deliveryRepo
                 .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
@@ -47,13 +52,21 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
                 delivery.getDeliveryDate().toInstant()
         );
 
-        if (daysDelayed < 0) daysDelayed = 0;
+        if (daysDelayed < 0) {
+            daysDelayed = 0;
+        }
 
+        // penaltyPerDay × daysDelayed
         BigDecimal rawPenalty = rule.getPenaltyPerDay()
                 .multiply(BigDecimal.valueOf(daysDelayed));
 
+        // maxPenaltyPercentage / 100
+        BigDecimal maxPercentage = rule.getMaxPenaltyPercentage()
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        // baseContractValue × maxPercentage
         BigDecimal cap = contract.getBaseContractValue()
-                .multiply(BigDecimal.valueOf(rule.getMaxPenaltyPercentage() / 100));
+                .multiply(maxPercentage);
 
         BigDecimal finalPenalty = rawPenalty.min(cap);
 
@@ -69,11 +82,11 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
     @Override
     public PenaltyCalculation getCalculationById(Long id) {
         return penaltyRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Penalty calculation not found"));
     }
 
     @Override
-    public java.util.List<PenaltyCalculation> getCalculationsForContract(Long contractId) {
+    public List<PenaltyCalculation> getCalculationsForContract(Long contractId) {
         return penaltyRepo.findByContractId(contractId);
     }
 }
