@@ -1,33 +1,38 @@
 package com.example.demo.controller;
 
-import org.springframework.http.ResponseEntity;
+import com.example.demo.entity.BreachReport;
+import com.example.demo.service.BreachReportService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reports")
 public class BreachReportController {
 
+    private final BreachReportService service;
+
+    public BreachReportController(BreachReportService service) {
+        this.service = service;
+    }
+
     @PostMapping("/generate/{contractId}")
-    public ResponseEntity<String> generateReport(@PathVariable Long contractId) {
-        return ResponseEntity.ok(
-                "Breach report generated for contract " + contractId
-        );
+    public BreachReport generate(@PathVariable Long contractId) {
+        return service.generateReport(contractId);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getReport(@PathVariable Long id) {
-        return ResponseEntity.ok("Get breach report " + id);
+    public BreachReport get(@PathVariable Long id) {
+        return service.getReportById(id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public ResponseEntity<String> listReportsByContract(@PathVariable Long contractId) {
-        return ResponseEntity.ok(
-                "List breach reports for contract " + contractId
-        );
+    public List<BreachReport> list(@PathVariable Long contractId) {
+        return service.getReportsForContract(contractId);
     }
 
     @GetMapping
-    public ResponseEntity<String> listAllReports() {
-        return ResponseEntity.ok("List all breach reports");
+    public List<BreachReport> all() {
+        return service.getAllReports();
     }
 }
