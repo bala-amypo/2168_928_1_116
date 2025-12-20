@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔴 THIS WAS MISSING
+@Service
 public class BreachReportServiceImpl implements BreachReportService {
 
     private final BreachReportRepository reportRepo;
@@ -49,7 +49,18 @@ public class BreachReportServiceImpl implements BreachReportService {
     }
 
     @Override
+    public BreachReport getReportById(Long id) {
+        return reportRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+    }
+
+    @Override
     public List<BreachReport> getReportsByContract(Long contractId) {
         return reportRepo.findByContractId(contractId);
+    }
+
+    @Override
+    public List<BreachReport> getAllReports() {
+        return reportRepo.findAll();
     }
 }
