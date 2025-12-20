@@ -7,5 +7,5 @@ import java.util.List;
 public interface BreachReportRepository
         extends JpaRepository<BreachReport, Long> {
 
-    List<BreachReport> findByContract_Id(Long contractId);
+    List<BreachReport> findByContractId(Long contractId);
 }
