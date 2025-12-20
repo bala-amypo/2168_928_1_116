@@ -6,8 +6,11 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.DeliveryRecordService;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository repo;
@@ -24,7 +27,7 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
     @Override
     public DeliveryRecord getRecordById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
     }
 
     @Override

@@ -5,8 +5,11 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
     private final BreachRuleRepository repo;
@@ -36,18 +39,3 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     @Override
     public List<BreachRule> getAllRules() {
         return repo.findAll();
-    }
-
-    @Override
-    public void deactivateRule(Long id) {
-        BreachRule rule = getRuleById(id);
-        rule.setActive(false);
-        repo.save(rule);
-    }
-
-    @Override
-    public BreachRule getActiveDefaultOrFirst() {
-        return repo.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseThrow(() -> new ResourceNotFoundException("No active breach rule"));
-    }
-}

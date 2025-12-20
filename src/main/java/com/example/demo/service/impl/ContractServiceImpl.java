@@ -7,9 +7,11 @@ import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
 
-import java.util.Date;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepo;
@@ -37,7 +39,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract getContractById(Long id) {
         return contractRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
     }
 
     @Override
@@ -58,6 +60,7 @@ public class ContractServiceImpl implements ContractService {
         } else {
             contract.setStatus("COMPLETED");
         }
+
         return contractRepo.save(contract);
     }
 }
