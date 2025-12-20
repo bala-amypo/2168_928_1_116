@@ -10,9 +10,16 @@ public class DeliveryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long contractId;
-    private Date actualDeliveryDate;
-    private String deliveryStatus;
+    @ManyToOne
+    private Contract contract;
 
-    
+    @Temporal(TemporalType.DATE)
+    private Date deliveryDate;
+
+    private String notes;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt = new Date();
+
+    // getters & setters
 }

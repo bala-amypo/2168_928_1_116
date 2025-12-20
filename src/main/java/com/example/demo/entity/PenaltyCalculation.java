@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 public class PenaltyCalculation {
@@ -9,37 +11,16 @@ public class PenaltyCalculation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long contractId;
-    private Double delayDays;
-    private Double penaltyValue;
+    @ManyToOne
+    private Contract contract;
 
-    public PenaltyCalculation() {}
+    private Integer daysDelayed;
+    private BigDecimal calculatedPenalty;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    private BreachRule appliedRule;
 
-    public Long getContractId() {
-        return contractId;
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date calculatedAt = new Date();
 
-    public void setContractId(Long contractId) {
-        this.contractId = contractId;
-    }
-
-    public Double getDelayDays() {
-        return delayDays;
-    }
-
-    public void setDelayDays(Double delayDays) {
-        this.delayDays = delayDays;
-    }
-
-    public Double getPenaltyValue() {
-        return penaltyValue;
-    }
-
-    public void setPenaltyValue(Double penaltyValue) {
-        this.penaltyValue = penaltyValue;
-    }
 }
