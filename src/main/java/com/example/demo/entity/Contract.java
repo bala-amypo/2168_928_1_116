@@ -15,9 +15,7 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String contractNumber;
-
     private String title;
     private String counterpartyName;
 
@@ -46,16 +44,10 @@ public class Contract {
         updatedAt = new Date();
     }
 
-    // =====================
-    // GETTERS & SETTERS
-    // =====================
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getContractNumber() {
@@ -100,17 +92,5 @@ public class Contract {
 
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
     }
 }
