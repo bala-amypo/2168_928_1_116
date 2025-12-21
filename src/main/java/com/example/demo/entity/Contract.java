@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -11,9 +10,6 @@ import java.util.Date;
     name = "contracts",
     uniqueConstraints = @UniqueConstraint(columnNames = "contractNumber")
 )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Contract {
 
     @Id
@@ -45,6 +41,8 @@ public class Contract {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
+    // ===== LIFECYCLE CALLBACKS =====
+
     @PrePersist
     public void onCreate() {
         createdAt = new Date();
@@ -55,5 +53,63 @@ public class Contract {
     @PreUpdate
     public void onUpdate() {
         updatedAt = new Date();
+    }
+
+    // ===== GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCounterpartyName() {
+        return counterpartyName;
+    }
+
+    public void setCounterpartyName(String counterpartyName) {
+        this.counterpartyName = counterpartyName;
+    }
+
+    public Date getAgreedDeliveryDate() {
+        return agreedDeliveryDate;
+    }
+
+    public void setAgreedDeliveryDate(Date agreedDeliveryDate) {
+        this.agreedDeliveryDate = agreedDeliveryDate;
+    }
+
+    public BigDecimal getBaseContractValue() {
+        return baseContractValue;
+    }
+
+    public void setBaseContractValue(BigDecimal baseContractValue) {
+        this.baseContractValue = baseContractValue;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }
