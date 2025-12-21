@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import com.example.demo.service.validation.ProjectValidator; // ✅ ADDED
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+
+        // ✅ VALIDATION ADDED
+        ProjectValidator.validateUser(user);
+
         return repo.save(user);
     }
 
@@ -34,6 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(Long id, User user) {
+
+        // ✅ VALIDATION ADDED
+        ProjectValidator.validateUser(user);
+
         User existing = getById(id);
         existing.setUsername(user.getUsername());
         existing.setEmail(user.getEmail());
