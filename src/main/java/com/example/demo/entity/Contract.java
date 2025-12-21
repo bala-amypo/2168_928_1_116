@@ -41,7 +41,7 @@ public class Contract {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    // ===== LIFECYCLE CALLBACKS =====
+    // ===== LIFECYCLE =====
 
     @PrePersist
     public void onCreate() {
@@ -59,6 +59,11 @@ public class Contract {
 
     public Long getId() {
         return id;
+    }
+
+    // 🔹 REQUIRED because service uses setId()
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContractNumber() {
@@ -103,6 +108,11 @@ public class Contract {
 
     public String getStatus() {
         return status;
+    }
+
+    // 🔹 REQUIRED because service uses setStatus()
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {
