@@ -5,52 +5,51 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    private final BreachRuleRepository repo;
+    private final BreachRuleRepository repository;
 
-    public BreachRuleServiceImpl(BreachRuleRepository repo) {
-        this.repo = repo;
+    public BreachRuleServiceImpl(BreachRuleRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public BreachRule createRule(BreachRule rule) {
-        return repo.save(rule);
+        return repository.save(rule);
     }
 
     @Override
     public BreachRule updateRule(Long id, BreachRule rule) {
         BreachRule existing = getRuleById(id);
-        rule.setId(existing.getId());
-        return repo.save(rule);
-    }
-
-    @Override
-    public BreachRule getRuleById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
+        existing.setPenaltyPerDay(rule.getPenaltyPerDay());
+        existing.setMaxPenaltyPercentage(rule.getMaxPenaltyPercentage());
+        existing.setActive(rule.isActive());
+        return repository.save(existing);
     }
 
     @Override
     public List<BreachRule> getAllRules() {
-        return repo.findAll();
+        return repository.findAll();
+    }
+
+    @Override
+    public BreachRule getRuleById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
     }
 
     @Override
     public void deactivateRule(Long id) {
         BreachRule rule = getRuleById(id);
         rule.setActive(false);
-        repo.save(rule);
+        repository.save(rule);
     }
 
     @Override
     public BreachRule getActiveDefaultOrFirst() {
-        return repo.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
+        return repository.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
                 .orElseThrow(() -> new ResourceNotFoundException("No active breach rule"));
     }
 }

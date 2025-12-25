@@ -32,7 +32,7 @@ public class ContractController {
     }
 
     @GetMapping
-    public List<Contract> getAll() {
+    public List<Contract> list() {
         return service.getAllContracts();
     }
 
