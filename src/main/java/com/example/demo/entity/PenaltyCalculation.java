@@ -12,16 +12,20 @@ public class PenaltyCalculation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /* ========= RELATIONSHIPS ========= */
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "contract_id")
     private Contract contract;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "rule_id")
+    private BreachRule appliedRule;
 
     private Integer daysDelayed;
 
     @Column(precision = 15, scale = 2)
     private BigDecimal calculatedPenalty;
-
-    @ManyToOne
-    private BreachRule appliedRule;
 
     private LocalDateTime calculatedAt;
 
@@ -31,12 +35,20 @@ public class PenaltyCalculation {
     }
 
     public Long getId() { return id; }
+
     public Contract getContract() { return contract; }
     public void setContract(Contract contract) { this.contract = contract; }
-    public Integer getDaysDelayed() { return daysDelayed; }
-    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
-    public BigDecimal getCalculatedPenalty() { return calculatedPenalty; }
-    public void setCalculatedPenalty(BigDecimal calculatedPenalty) { this.calculatedPenalty = calculatedPenalty; }
+
     public BreachRule getAppliedRule() { return appliedRule; }
     public void setAppliedRule(BreachRule appliedRule) { this.appliedRule = appliedRule; }
+
+    public Integer getDaysDelayed() { return daysDelayed; }
+    public void setDaysDelayed(Integer daysDelayed) {
+        this.daysDelayed = daysDelayed;
+    }
+
+    public BigDecimal getCalculatedPenalty() { return calculatedPenalty; }
+    public void setCalculatedPenalty(BigDecimal calculatedPenalty) {
+        this.calculatedPenalty = calculatedPenalty;
+    }
 }

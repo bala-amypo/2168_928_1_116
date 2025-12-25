@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "contracts", uniqueConstraints = {
@@ -19,7 +20,6 @@ public class Contract {
     private String contractNumber;
 
     private String title;
-
     private String counterpartyName;
 
     @Column(nullable = false)
@@ -34,6 +34,19 @@ public class Contract {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    /* ================= RELATIONSHIPS ================= */
+
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeliveryRecord> deliveryRecords;
+
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private List<PenaltyCalculation> penaltyCalculations;
+
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private List<BreachReport> breachReports;
+
+    /* ================= AUDIT ================= */
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -45,18 +58,29 @@ public class Contract {
         updatedAt = LocalDateTime.now();
     }
 
-    // getters & setters
+    /* ================= GETTERS & SETTERS ================= */
+
     public Long getId() { return id; }
+
     public String getContractNumber() { return contractNumber; }
     public void setContractNumber(String contractNumber) { this.contractNumber = contractNumber; }
+
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+
     public String getCounterpartyName() { return counterpartyName; }
     public void setCounterpartyName(String counterpartyName) { this.counterpartyName = counterpartyName; }
+
     public LocalDate getAgreedDeliveryDate() { return agreedDeliveryDate; }
-    public void setAgreedDeliveryDate(LocalDate agreedDeliveryDate) { this.agreedDeliveryDate = agreedDeliveryDate; }
+    public void setAgreedDeliveryDate(LocalDate agreedDeliveryDate) {
+        this.agreedDeliveryDate = agreedDeliveryDate;
+    }
+
     public BigDecimal getBaseContractValue() { return baseContractValue; }
-    public void setBaseContractValue(BigDecimal baseContractValue) { this.baseContractValue = baseContractValue; }
+    public void setBaseContractValue(BigDecimal baseContractValue) {
+        this.baseContractValue = baseContractValue;
+    }
+
     public ContractStatus getStatus() { return status; }
     public void setStatus(ContractStatus status) { this.status = status; }
 }
