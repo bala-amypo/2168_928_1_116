@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PenaltyCalculation;
 import com.example.demo.service.PenaltyCalculationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,17 +18,28 @@ public class PenaltyCalculationController {
     }
 
     @PostMapping("/calculate/{contractId}")
-    public PenaltyCalculation calculate(@PathVariable Long contractId) {
-        return penaltyCalculationService.calculatePenalty(contractId);
+    public ResponseEntity<PenaltyCalculation> calculatePenalty(
+            @PathVariable Long contractId) {
+
+        PenaltyCalculation calculation =
+                penaltyCalculationService.calculatePenalty(contractId);
+
+        return ResponseEntity.ok(calculation);
     }
 
     @GetMapping("/{id}")
-    public PenaltyCalculation getCalculation(@PathVariable Long id) {
-        return penaltyCalculationService.getCalculationById(id);
+    public ResponseEntity<PenaltyCalculation> getCalculationById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                penaltyCalculationService.getCalculationById(id)
+        );
     }
 
     @GetMapping("/contract/{contractId}")
-    public List<PenaltyCalculation> getCalculations(@PathVariable Long contractId) {
-        return penaltyCalculationService.getCalculationsForContract(contractId);
+    public ResponseEntity<List<PenaltyCalculation>> getByContract(
+            @PathVariable Long contractId) {
+
+        return ResponseEntity.ok(
+                penaltyCalculationService.getCalculationsForContract(contractId)
+        );
     }
 }
