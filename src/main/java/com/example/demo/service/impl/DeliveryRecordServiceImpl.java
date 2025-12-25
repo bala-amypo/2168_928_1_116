@@ -10,7 +10,7 @@ import com.example.demo.service.DeliveryRecordService;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     private final DeliveryRecordRepository deliveryRecordRepository;

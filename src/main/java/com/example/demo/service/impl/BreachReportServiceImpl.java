@@ -6,9 +6,11 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachReportRepository;
 import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.BreachReportService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class BreachReportServiceImpl implements BreachReportService {
 
     private final BreachReportRepository reportRepository;

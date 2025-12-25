@@ -11,6 +11,7 @@ import com.example.demo.service.ContractService;
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;

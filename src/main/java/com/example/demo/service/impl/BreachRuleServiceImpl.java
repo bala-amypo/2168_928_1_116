@@ -6,7 +6,7 @@ import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
 
 import java.util.List;
-
+@Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
     private final BreachRuleRepository repository;
