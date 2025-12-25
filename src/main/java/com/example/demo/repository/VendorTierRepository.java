@@ -1,7 +1,15 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.VendorTier;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface VendorTierRepository extends JpaRepository<Object, Long> {
-    boolean existsByTierName(String name);
+import java.util.Optional;
+
+@Repository
+public interface VendorTierRepository extends JpaRepository<VendorTier, Long> {
+
+    Optional<VendorTier> findByTierName(String tierName);
+
+    Optional<VendorTier> findFirstByActiveTrueOrderByDiscountPercentageDesc();
 }
