@@ -1,66 +1,54 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Contract;
-import com.example.demo.entity.DeliveryRecord;
+import com.example.demo.entity.ContractStatus;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
-import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
-
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class ContractServiceImpl implements ContractService {
 
-    private final ContractRepository contractRepo;
-    private final DeliveryRecordRepository deliveryRepo;
+    private final ContractRepository contractRepository;
 
-    public ContractServiceImpl(
-            ContractRepository contractRepo,
-            DeliveryRecordRepository deliveryRepo) {
-        this.contractRepo = contractRepo;
-        this.deliveryRepo = deliveryRepo;
+    public ContractServiceImpl(ContractRepository contractRepository) {
+        this.contractRepository = contractRepository;
     }
 
     @Override
     public Contract createContract(Contract contract) {
-        return contractRepo.save(contract);
+        if (contract.getBaseContractValue().signum() <= 0) {
+            throw new IllegalArgumentException("baseContractValue must be greater than zero");
+        }
+        return contractRepository.save(contract);
     }
 
     @Override
     public Contract updateContract(Long id, Contract contract) {
         Contract existing = getContractById(id);
-        contract.setId(existing.getId());
-        return contractRepo.save(contract);
+        existing.setTitle(contract.getTitle());
+        existing.setCounterpartyName(contract.getCounterpartyName());
+        existing.setAgreedDeliveryDate(contract.getAgreedDeliveryDate());
+        existing.setBaseContractValue(contract.getBaseContractValue());
+        return contractRepository.save(existing);
     }
 
     @Override
     public Contract getContractById(Long id) {
-        return contractRepo.findById(id)
+        return contractRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
     }
 
     @Override
     public List<Contract> getAllContracts() {
-        return contractRepo.findAll();
+        return contractRepository.findAll();
     }
 
     @Override
     public Contract updateContractStatus(Long contractId) {
         Contract contract = getContractById(contractId);
-
-        DeliveryRecord latest = deliveryRepo
-                .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
-                .orElse(null);
-
-        if (latest != null && latest.getDeliveryDate().after(contract.getAgreedDeliveryDate())) {
-            contract.setStatus("BREACHED");
-        } else {
-            contract.setStatus("COMPLETED");
-        }
-
-        return contractRepo.save(contract);
+        contract.setStatus(ContractStatus.BREACHED);
+        return contractRepository.save(contract);
     }
 }

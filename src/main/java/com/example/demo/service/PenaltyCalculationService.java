@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.PenaltyCalculation;
+import com.example.demo.entity.BreachReport;
 import java.util.List;
 
-public interface PenaltyCalculationService {
-    PenaltyCalculation calculatePenalty(Long contractId);
-    PenaltyCalculation getCalculationById(Long id);
-    List<PenaltyCalculation> getCalculationsForContract(Long contractId);
+public interface BreachReportService {
+    BreachReport generateReport(Long contractId);
+    BreachReport getReportById(Long id);
+    List<BreachReport> getReportsForContract(Long contractId);
+    List<BreachReport> getAllReports();
 }
