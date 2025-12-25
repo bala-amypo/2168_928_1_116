@@ -1,37 +1,42 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "penalty_calculation")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "penalty_calculations")
 public class PenaltyCalculation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "contract_id")
+    @ManyToOne(optional = false)
     private Contract contract;
 
-    private int daysDelayed;
+    private Integer daysDelayed;
 
-    @NotNull(message = "Calculated penalty is required")
+    @Column(precision = 15, scale = 2)
     private BigDecimal calculatedPenalty;
 
-    @NotNull(message = "Breach rule is required")
     @ManyToOne
-    @JoinColumn(name = "rule_id")
     private BreachRule appliedRule;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date calculatedAt = new Date();
+    private LocalDateTime calculatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        calculatedAt = LocalDateTime.now();
+    }
+
+    public Long getId() { return id; }
+    public Contract getContract() { return contract; }
+    public void setContract(Contract contract) { this.contract = contract; }
+    public Integer getDaysDelayed() { return daysDelayed; }
+    public void setDaysDelayed(Integer daysDelayed) { this.daysDelayed = daysDelayed; }
+    public BigDecimal getCalculatedPenalty() { return calculatedPenalty; }
+    public void setCalculatedPenalty(BigDecimal calculatedPenalty) { this.calculatedPenalty = calculatedPenalty; }
+    public BreachRule getAppliedRule() { return appliedRule; }
+    public void setAppliedRule(BreachRule appliedRule) { this.appliedRule = appliedRule; }
 }

@@ -1,125 +1,62 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "contracts",
-    uniqueConstraints = @UniqueConstraint(columnNames = "contractNumber")
-)
+@Table(name = "contracts", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "contractNumber")
+})
 public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Contract number is required")
+    @Column(nullable = false)
     private String contractNumber;
 
-    @NotBlank(message = "Title is required")
     private String title;
 
-    @NotBlank(message = "Counterparty name is required")
     private String counterpartyName;
 
-    @NotNull(message = "Agreed delivery date is required")
-    @Temporal(TemporalType.DATE)
-    private Date agreedDeliveryDate;
+    @Column(nullable = false)
+    private LocalDate agreedDeliveryDate;
 
-    @NotNull(message = "Base contract value is required")
-    @DecimalMin(value = "0.0", inclusive = false)
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal baseContractValue;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ContractStatus status = ContractStatus.ACTIVE;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
-
-    // ===== LIFECYCLE =====
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
-    public void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
-        status = "ACTIVE";
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
     }
 
     @PreUpdate
-    public void onUpdate() {
-        updatedAt = new Date();
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    // ===== GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
-    }
-
-    // 🔹 REQUIRED because service uses setId()
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContractNumber() {
-        return contractNumber;
-    }
-
-    public void setContractNumber(String contractNumber) {
-        this.contractNumber = contractNumber;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getCounterpartyName() {
-        return counterpartyName;
-    }
-
-    public void setCounterpartyName(String counterpartyName) {
-        this.counterpartyName = counterpartyName;
-    }
-
-    public Date getAgreedDeliveryDate() {
-        return agreedDeliveryDate;
-    }
-
-    public void setAgreedDeliveryDate(Date agreedDeliveryDate) {
-        this.agreedDeliveryDate = agreedDeliveryDate;
-    }
-
-    public BigDecimal getBaseContractValue() {
-        return baseContractValue;
-    }
-
-    public void setBaseContractValue(BigDecimal baseContractValue) {
-        this.baseContractValue = baseContractValue;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    // 🔹 REQUIRED because service uses setStatus()
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public String getContractNumber() { return contractNumber; }
+    public void setContractNumber(String contractNumber) { this.contractNumber = contractNumber; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getCounterpartyName() { return counterpartyName; }
+    public void setCounterpartyName(String counterpartyName) { this.counterpartyName = counterpartyName; }
+    public LocalDate getAgreedDeliveryDate() { return agreedDeliveryDate; }
+    public void setAgreedDeliveryDate(LocalDate agreedDeliveryDate) { this.agreedDeliveryDate = agreedDeliveryDate; }
+    public BigDecimal getBaseContractValue() { return baseContractValue; }
+    public void setBaseContractValue(BigDecimal baseContractValue) { this.baseContractValue = baseContractValue; }
+    public ContractStatus getStatus() { return status; }
+    public void setStatus(ContractStatus status) { this.status = status; }
 }

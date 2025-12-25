@@ -1,34 +1,40 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "breach_rule")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "breach_rules", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "ruleName")
+})
 public class BreachRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Rule name is required")
+    @Column(nullable = false)
     private String ruleName;
 
-    @NotNull(message = "Penalty per day is required")
-    @DecimalMin(value = "0.0", inclusive = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal penaltyPerDay;
 
-    @NotNull(message = "Max penalty percentage is required")
-    @DecimalMin(value = "0.0")
-    @DecimalMax(value = "100.0")
-    private BigDecimal maxPenaltyPercentage;
+    @Column(nullable = false)
+    private Double maxPenaltyPercentage;
 
-    private boolean active = true;
+    private boolean active;
 
     private boolean isDefaultRule;
+
+    public Long getId() { return id; }
+    public String getRuleName() { return ruleName; }
+    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+    public BigDecimal getPenaltyPerDay() { return penaltyPerDay; }
+    public void setPenaltyPerDay(BigDecimal penaltyPerDay) { this.penaltyPerDay = penaltyPerDay; }
+    public Double getMaxPenaltyPercentage() { return maxPenaltyPercentage; }
+    public void setMaxPenaltyPercentage(Double maxPenaltyPercentage) { this.maxPenaltyPercentage = maxPenaltyPercentage; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+    public boolean isDefaultRule() { return isDefaultRule; }
+    public void setDefaultRule(boolean defaultRule) { isDefaultRule = defaultRule; }
 }
