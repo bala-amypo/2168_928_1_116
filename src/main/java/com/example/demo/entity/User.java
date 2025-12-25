@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username")
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
 })
 public class User {
 
@@ -13,10 +14,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* ================= REQUIRED BY VALIDATOR ================= */
+    /* ================= REQUIRED FIELDS ================= */
 
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -37,7 +41,7 @@ public class User {
         return id;
     }
 
-    // 🔥 REQUIRED: ProjectValidator & UserServiceImpl use this
+    // REQUIRED by ProjectValidator & UserServiceImpl
     public String getUsername() {
         return username;
     }
@@ -46,7 +50,16 @@ public class User {
         this.username = username;
     }
 
-    // 🔥 REQUIRED
+    // REQUIRED by ProjectValidator & UserServiceImpl
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // REQUIRED
     public String getPassword() {
         return password;
     }
@@ -55,7 +68,7 @@ public class User {
         this.password = password;
     }
 
-    // 🔥 REQUIRED: ProjectValidator & UserServiceImpl use this
+    // REQUIRED by ProjectValidator & UserServiceImpl
     public String getRole() {
         return role;
     }
