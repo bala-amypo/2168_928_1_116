@@ -4,8 +4,10 @@ import com.example.demo.entity.BreachRule;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
@@ -17,6 +19,16 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule createRule(BreachRule rule) {
+
+        if (rule.isDefaultRule()) {
+            repository.findAll().forEach(r -> {
+                if (r.isDefaultRule()) {
+                    r.setDefaultRule(false);
+                    repository.save(r);
+                }
+            });
+        }
+
         return repository.save(rule);
     }
 

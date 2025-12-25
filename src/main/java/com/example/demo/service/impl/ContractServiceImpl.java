@@ -7,8 +7,8 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,9 +57,10 @@ public class ContractServiceImpl implements ContractService {
                 .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
                 .orElse(null);
 
-        if (latest != null && latest.getDeliveryDate().isAfter(contract.getAgreedDeliveryDate())) {
+        if (latest != null && latest.getDeliveryDate()
+                .isAfter(contract.getAgreedDeliveryDate())) {
             contract.setStatus(ContractStatus.BREACHED);
-        } else if (latest != null && !latest.getDeliveryDate().isAfter(contract.getAgreedDeliveryDate())) {
+        } else if (latest != null) {
             contract.setStatus(ContractStatus.COMPLETED);
         }
 
