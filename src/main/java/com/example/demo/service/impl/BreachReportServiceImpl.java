@@ -1,58 +1,53 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.BreachReport;
+import com.example.demo.entity.PenaltyCalculation;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.BreachReportRepository;
+import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.BreachReportService;
 
 import java.util.List;
 
 public class BreachReportServiceImpl implements BreachReportService {
 
-    private final PenaltyCalculationRepository calcRepo;
-    private final BreachReportRepository reportRepo;
-    private final ContractRepository contractRepo;
+    private final BreachReportRepository reportRepository;
+    private final PenaltyCalculationRepository calculationRepository;
 
-    public BreachReportServiceImpl(
-            PenaltyCalculationRepository calcRepo,
-            BreachReportRepository reportRepo,
-            ContractRepository contractRepo) {
-        this.calcRepo = calcRepo;
-        this.reportRepo = reportRepo;
-        this.contractRepo = contractRepo;
+    public BreachReportServiceImpl(BreachReportRepository reportRepository,
+                                   PenaltyCalculationRepository calculationRepository) {
+        this.reportRepository = reportRepository;
+        this.calculationRepository = calculationRepository;
     }
 
     @Override
     public BreachReport generateReport(Long contractId) {
-        Contract contract = contractRepo.findById(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
-
-        PenaltyCalculation calc = calcRepo
+        PenaltyCalculation calc = calculationRepository
                 .findTopByContractIdOrderByCalculatedAtDesc(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("No penalty calculation"));
 
         BreachReport report = new BreachReport();
-        report.setContract(contract);
+        report.setContract(calc.getContract());
         report.setDaysDelayed(calc.getDaysDelayed());
         report.setPenaltyAmount(calc.getCalculatedPenalty());
-        report.setRemarks("Auto-generated breach report");
+        report.setRemarks("Auto generated");
 
-        return reportRepo.save(report);
+        return reportRepository.save(report);
     }
 
     @Override
     public BreachReport getReportById(Long id) {
-        return reportRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+        return reportRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
     @Override
     public List<BreachReport> getReportsForContract(Long contractId) {
-        return reportRepo.findByContractId(contractId);
+        return reportRepository.findByContractId(contractId);
     }
 
     @Override
     public List<BreachReport> getAllReports() {
-        return reportRepo.findAll();
+        return reportRepository.findAll();
     }
 }

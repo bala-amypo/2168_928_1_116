@@ -2,25 +2,28 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Contract;
 import com.example.demo.entity.ContractStatus;
+import com.example.demo.entity.DeliveryRecord;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
+import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
+    private final DeliveryRecordRepository deliveryRecordRepository;
 
-    public ContractServiceImpl(ContractRepository contractRepository) {
+    public ContractServiceImpl(ContractRepository contractRepository,
+                               DeliveryRecordRepository deliveryRecordRepository) {
         this.contractRepository = contractRepository;
+        this.deliveryRecordRepository = deliveryRecordRepository;
     }
 
     @Override
     public Contract createContract(Contract contract) {
-        if (contract.getBaseContractValue().signum() <= 0) {
-            throw new IllegalArgumentException("baseContractValue must be greater than zero");
-        }
         return contractRepository.save(contract);
     }
 
@@ -37,7 +40,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract getContractById(Long id) {
         return contractRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
     @Override
@@ -48,7 +51,17 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract updateContractStatus(Long contractId) {
         Contract contract = getContractById(contractId);
-        contract.setStatus(ContractStatus.BREACHED);
+
+        DeliveryRecord latest = deliveryRecordRepository
+                .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
+                .orElse(null);
+
+        if (latest != null && latest.getDeliveryDate().isAfter(contract.getAgreedDeliveryDate())) {
+            contract.setStatus(ContractStatus.BREACHED);
+        } else if (latest != null && !latest.getDeliveryDate().isAfter(contract.getAgreedDeliveryDate())) {
+            contract.setStatus(ContractStatus.COMPLETED);
+        }
+
         return contractRepository.save(contract);
     }
 }

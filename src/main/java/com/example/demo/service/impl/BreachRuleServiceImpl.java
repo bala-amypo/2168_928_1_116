@@ -26,6 +26,7 @@ public class BreachRuleServiceImpl implements BreachRuleService {
         existing.setPenaltyPerDay(rule.getPenaltyPerDay());
         existing.setMaxPenaltyPercentage(rule.getMaxPenaltyPercentage());
         existing.setActive(rule.isActive());
+        existing.setDefaultRule(rule.isDefaultRule());
         return repository.save(existing);
     }
 
