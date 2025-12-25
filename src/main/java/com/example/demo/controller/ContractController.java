@@ -10,34 +10,35 @@ import java.util.List;
 @RequestMapping("/api/contracts")
 public class ContractController {
 
-    private final ContractService service;
+    private final ContractService contractService;
 
-    public ContractController(ContractService service) {
-        this.service = service;
+    public ContractController(ContractService contractService) {
+        this.contractService = contractService;
     }
 
     @PostMapping
-    public Contract create(@RequestBody Contract contract) {
-        return service.createContract(contract);
+    public Contract createContract(@RequestBody Contract contract) {
+        return contractService.createContract(contract);
     }
 
     @PutMapping("/{id}")
-    public Contract update(@PathVariable Long id, @RequestBody Contract contract) {
-        return service.updateContract(id, contract);
+    public Contract updateContract(@PathVariable Long id,
+                                   @RequestBody Contract contract) {
+        return contractService.updateContract(id, contract);
     }
 
     @GetMapping("/{id}")
-    public Contract get(@PathVariable Long id) {
-        return service.getContractById(id);
+    public Contract getContract(@PathVariable Long id) {
+        return contractService.getContractById(id);
     }
 
     @GetMapping
-    public List<Contract> list() {
-        return service.getAllContracts();
+    public List<Contract> getAllContracts() {
+        return contractService.getAllContracts();
     }
 
     @PutMapping("/{id}/update-status")
     public Contract updateStatus(@PathVariable Long id) {
-        return service.updateContractStatus(id);
+        return contractService.updateContractStatus(id);
     }
 }

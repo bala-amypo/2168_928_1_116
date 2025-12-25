@@ -10,29 +10,29 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class BreachReportController {
 
-    private final BreachReportService service;
+    private final BreachReportService breachReportService;
 
-    public BreachReportController(BreachReportService service) {
-        this.service = service;
+    public BreachReportController(BreachReportService breachReportService) {
+        this.breachReportService = breachReportService;
     }
 
     @PostMapping("/generate/{contractId}")
     public BreachReport generate(@PathVariable Long contractId) {
-        return service.generateReport(contractId);
+        return breachReportService.generateReport(contractId);
     }
 
     @GetMapping("/{id}")
-    public BreachReport get(@PathVariable Long id) {
-        return service.getReportById(id);
+    public BreachReport getReport(@PathVariable Long id) {
+        return breachReportService.getReportById(id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public List<BreachReport> list(@PathVariable Long contractId) {
-        return service.getReportsForContract(contractId);
+    public List<BreachReport> getReportsForContract(@PathVariable Long contractId) {
+        return breachReportService.getReportsForContract(contractId);
     }
 
     @GetMapping
-    public List<BreachReport> listAll() {
-        return service.getAllReports();
+    public List<BreachReport> getAllReports() {
+        return breachReportService.getAllReports();
     }
 }

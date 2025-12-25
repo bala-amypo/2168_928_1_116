@@ -10,29 +10,29 @@ import java.util.List;
 @RequestMapping("/api/delivery-records")
 public class DeliveryRecordController {
 
-    private final DeliveryRecordService service;
+    private final DeliveryRecordService deliveryRecordService;
 
-    public DeliveryRecordController(DeliveryRecordService service) {
-        this.service = service;
+    public DeliveryRecordController(DeliveryRecordService deliveryRecordService) {
+        this.deliveryRecordService = deliveryRecordService;
     }
 
     @PostMapping
-    public DeliveryRecord create(@RequestBody DeliveryRecord record) {
-        return service.createDeliveryRecord(record);
+    public DeliveryRecord logDelivery(@RequestBody DeliveryRecord record) {
+        return deliveryRecordService.createDeliveryRecord(record);
     }
 
     @GetMapping("/{id}")
-    public DeliveryRecord get(@PathVariable Long id) {
-        return service.getRecordById(id);
+    public DeliveryRecord getRecord(@PathVariable Long id) {
+        return deliveryRecordService.getRecordById(id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public List<DeliveryRecord> list(@PathVariable Long contractId) {
-        return service.getDeliveryRecordsForContract(contractId);
+    public List<DeliveryRecord> getRecordsForContract(@PathVariable Long contractId) {
+        return deliveryRecordService.getDeliveryRecordsForContract(contractId);
     }
 
     @GetMapping("/contract/{contractId}/latest")
-    public DeliveryRecord latest(@PathVariable Long contractId) {
-        return service.getLatestDeliveryRecord(contractId);
+    public DeliveryRecord getLatest(@PathVariable Long contractId) {
+        return deliveryRecordService.getLatestDeliveryRecord(contractId);
     }
 }

@@ -10,34 +10,35 @@ import java.util.List;
 @RequestMapping("/api/breach-rules")
 public class BreachRuleController {
 
-    private final BreachRuleService service;
+    private final BreachRuleService breachRuleService;
 
-    public BreachRuleController(BreachRuleService service) {
-        this.service = service;
+    public BreachRuleController(BreachRuleService breachRuleService) {
+        this.breachRuleService = breachRuleService;
     }
 
     @PostMapping
-    public BreachRule create(@RequestBody BreachRule rule) {
-        return service.createRule(rule);
+    public BreachRule createRule(@RequestBody BreachRule rule) {
+        return breachRuleService.createRule(rule);
     }
 
     @PutMapping("/{id}")
-    public BreachRule update(@PathVariable Long id, @RequestBody BreachRule rule) {
-        return service.updateRule(id, rule);
+    public BreachRule updateRule(@PathVariable Long id,
+                                 @RequestBody BreachRule rule) {
+        return breachRuleService.updateRule(id, rule);
     }
 
     @GetMapping("/{id}")
-    public BreachRule get(@PathVariable Long id) {
-        return service.getRuleById(id);
+    public BreachRule getRule(@PathVariable Long id) {
+        return breachRuleService.getRuleById(id);
     }
 
     @GetMapping
-    public List<BreachRule> getAll() {
-        return service.getAllRules();
+    public List<BreachRule> getAllRules() {
+        return breachRuleService.getAllRules();
     }
 
     @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
-        service.deactivateRule(id);
+        breachRuleService.deactivateRule(id);
     }
 }

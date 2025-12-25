@@ -10,24 +10,24 @@ import java.util.List;
 @RequestMapping("/api/penalties")
 public class PenaltyCalculationController {
 
-    private final PenaltyCalculationService service;
+    private final PenaltyCalculationService penaltyCalculationService;
 
-    public PenaltyCalculationController(PenaltyCalculationService service) {
-        this.service = service;
+    public PenaltyCalculationController(PenaltyCalculationService penaltyCalculationService) {
+        this.penaltyCalculationService = penaltyCalculationService;
     }
 
     @PostMapping("/calculate/{contractId}")
     public PenaltyCalculation calculate(@PathVariable Long contractId) {
-        return service.calculatePenalty(contractId);
+        return penaltyCalculationService.calculatePenalty(contractId);
     }
 
     @GetMapping("/{id}")
-    public PenaltyCalculation get(@PathVariable Long id) {
-        return service.getCalculationById(id);
+    public PenaltyCalculation getCalculation(@PathVariable Long id) {
+        return penaltyCalculationService.getCalculationById(id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public List<PenaltyCalculation> list(@PathVariable Long contractId) {
-        return service.getCalculationsForContract(contractId);
+    public List<PenaltyCalculation> getCalculations(@PathVariable Long contractId) {
+        return penaltyCalculationService.getCalculationsForContract(contractId);
     }
 }
