@@ -22,12 +22,12 @@ public class PenaltyCalculationController {
     }
 
     @GetMapping("/{id}")
-    public PenaltyCalculation getById(@PathVariable Long id) {
+    public PenaltyCalculation get(@PathVariable Long id) {
         return service.getCalculationById(id);
     }
 
     @GetMapping("/contract/{contractId}")
-    public List<PenaltyCalculation> getByContract(@PathVariable Long contractId) {
+    public List<PenaltyCalculation> list(@PathVariable Long contractId) {
         return service.getCalculationsForContract(contractId);
     }
 }
