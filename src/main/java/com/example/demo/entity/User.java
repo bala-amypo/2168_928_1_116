@@ -1,26 +1,17 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* ================= REQUIRED FIELDS ================= */
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
-
-    @Column(nullable = false)
-    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -28,49 +19,39 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public User() {
     }
 
-    /* ================= GETTERS / SETTERS ================= */
+    // ===== GETTERS =====
 
     public Long getId() {
         return id;
     }
 
-    // REQUIRED by ProjectValidator & UserServiceImpl
     public String getUsername() {
         return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    // ===== SETTERS =====
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    // REQUIRED by ProjectValidator & UserServiceImpl
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    // REQUIRED
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    // REQUIRED by ProjectValidator & UserServiceImpl
-    public String getRole() {
-        return role;
     }
 
     public void setRole(String role) {
