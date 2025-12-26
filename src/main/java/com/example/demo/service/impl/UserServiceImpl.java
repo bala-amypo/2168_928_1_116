@@ -3,8 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
-import com.example.demo.service.ProjectValidator;   // ✅ CORRECT IMPORT
+import com.example.demo.service.UserService;mv
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
