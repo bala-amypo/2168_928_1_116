@@ -3,11 +3,10 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Data
-@Builder
+@Table(name = "breach_reports")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BreachReport {
@@ -16,20 +15,7 @@ public class BreachReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Contract contract;
+    private Long contractId;
 
-    private long daysDelayed;
-
-    // MUST be double
-    private double penaltyAmount;
-
-    private String remarks;
-
-    private LocalDateTime reportGeneratedAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.reportGeneratedAt = LocalDateTime.now();
-    }
+    private String description;
 }
