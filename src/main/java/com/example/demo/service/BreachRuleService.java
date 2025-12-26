@@ -6,11 +6,7 @@ import java.util.List;
 
 public interface BreachRuleService {
 
-    BreachRule createRule(BreachRule rule);
-
-    void deactivateRule(Long id);
-
-    BreachRule getActiveDefaultOrFirst();
+    BreachRule getActiveRule();
 
     List<BreachRule> getAllRules();
 }
