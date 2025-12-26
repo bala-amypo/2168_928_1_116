@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ContractDto {
-    private String contractNumber;
-    private String title;
+public class AuthRequest {
+    private String email;
+    private String password;
 }
