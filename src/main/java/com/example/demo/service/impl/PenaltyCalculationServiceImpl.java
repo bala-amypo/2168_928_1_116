@@ -24,28 +24,24 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
     public PenaltyCalculation calculatePenalty(Long contractId) {
 
         Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Contract not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
 
         DeliveryRecord delivery = deliveryRecordRepository
                 .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("No delivery record"));
+                .orElseThrow(() -> new ResourceNotFoundException("No delivery record"));
 
         BreachRule rule = breachRuleRepository
                 .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("No active breach rule"));
+                .orElseThrow(() -> new ResourceNotFoundException("No active breach rule"));
 
-        long diff = ChronoUnit.DAYS.between(
+        long daysBetween = ChronoUnit.DAYS.between(
                 contract.getAgreedDeliveryDate(),
                 delivery.getDeliveryDate()
         );
 
-        int daysDelayed = (int) Math.max(diff, 0);
+        int daysDelayed = (int) Math.max(daysBetween, 0);
 
-        // Double → BigDecimal conversion (CORRECT)
-        BigDecimal penalty = BigDecimal.valueOf(rule.getPenaltyPerDay())
+        BigDecimal penalty = rule.getPenaltyPerDay()
                 .multiply(BigDecimal.valueOf(daysDelayed));
 
         BigDecimal maxPenalty = contract.getBaseContractValue()
@@ -58,21 +54,20 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
             penalty = maxPenalty;
         }
 
-        PenaltyCalculation calc = PenaltyCalculation.builder()
+        PenaltyCalculation calculation = PenaltyCalculation.builder()
                 .contract(contract)
                 .daysDelayed(daysDelayed)
                 .calculatedPenalty(penalty)
                 .appliedRule(rule)
                 .build();
 
-        return penaltyCalculationRepository.save(calc);
+        return penaltyCalculationRepository.save(calculation);
     }
 
     @Override
     public PenaltyCalculation getCalculationById(Long id) {
         return penaltyCalculationRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Calculation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Calculation not found"));
     }
 
     @Override

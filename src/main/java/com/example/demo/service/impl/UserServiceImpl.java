@@ -4,6 +4,7 @@ import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import com.example.demo.service.validation.ProjectValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,38 +18,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        if (user == null) {
-            throw new RuntimeException("User cannot be null");
-        }
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
-        }
-        if (user.getPassword() == null || user.getPassword().isBlank()) {
-            throw new RuntimeException("Password is required");
-        }
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            throw new RuntimeException("Role is required");
-        }
+        ProjectValidator.validateUser(user);
         return userRepository.save(user);
+    }
+
+    @Override
+    public User update(Long id, User updated) {
+        User existing = getById(id);
+        existing.setUsername(updated.getUsername());
+        existing.setEmail(updated.getEmail());
+        existing.setRole(updated.getRole());
+        return userRepository.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        User user = getById(id);
+        userRepository.delete(user);
     }
 
     @Override
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found");
-        }
-        userRepository.deleteById(id);
     }
 }
