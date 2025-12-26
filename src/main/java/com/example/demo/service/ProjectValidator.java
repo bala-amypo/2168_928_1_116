@@ -21,23 +21,9 @@ public class ProjectValidator {
             throw new RuntimeException("Base contract value must be greater than zero");
     }
 
-    public static void validateDeliveryRecord(DeliveryRecord record) {
-        if (record == null)
-            throw new RuntimeException("Delivery record cannot be null");
-
-        if (record.getContract() == null)
-            throw new RuntimeException("Contract is required");
-
-        if (record.getDeliveryDate() == null)
-            throw new RuntimeException("Delivery date is required");
-    }
-
     public static void validateBreachRule(BreachRule rule) {
         if (rule == null)
             throw new RuntimeException("Breach rule cannot be null");
-
-        if (rule.getRuleName() == null || rule.getRuleName().isBlank())
-            throw new RuntimeException("Rule name is required");
 
         if (rule.getPenaltyPerDay() <= 0)
             throw new RuntimeException("Penalty per day must be positive");
@@ -45,29 +31,6 @@ public class ProjectValidator {
         if (rule.getMaxPenaltyPercentage() <= 0 ||
                 rule.getMaxPenaltyPercentage() > 100)
             throw new RuntimeException("Invalid max penalty percentage");
-    }
-
-    public static void validatePenaltyCalculation(PenaltyCalculation calc) {
-        if (calc == null)
-            throw new RuntimeException("Penalty calculation cannot be null");
-
-        if (calc.getContract() == null)
-            throw new RuntimeException("Contract is required");
-
-        if (calc.getDaysDelayed() < 0)
-            throw new RuntimeException("Days delayed cannot be negative");
-    }
-
-    public static void validateBreachReport(BreachReport report) {
-        if (report == null)
-            throw new RuntimeException("Breach report cannot be null");
-
-        if (report.getContract() == null)
-            throw new RuntimeException("Contract is required");
-
-        if (report.getPenaltyAmount() == null ||
-                report.getPenaltyAmount().compareTo(BigDecimal.ZERO) < 0)
-            throw new RuntimeException("Penalty amount must be non-negative");
     }
 
     public static void validateUser(User user) {

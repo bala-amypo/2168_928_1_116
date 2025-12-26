@@ -37,14 +37,14 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
                 .orElseThrow(() ->
                         new ResourceNotFoundException("No active breach rule"));
 
-        long daysBetween = ChronoUnit.DAYS.between(
+        long diff = ChronoUnit.DAYS.between(
                 contract.getAgreedDeliveryDate(),
                 delivery.getDeliveryDate()
         );
 
-        int daysDelayed = (int) Math.max(daysBetween, 0);
+        int daysDelayed = (int) Math.max(diff, 0);
 
-        // Double → BigDecimal conversion
+        // Double → BigDecimal conversion (CORRECT)
         BigDecimal penalty = BigDecimal.valueOf(rule.getPenaltyPerDay())
                 .multiply(BigDecimal.valueOf(daysDelayed));
 
