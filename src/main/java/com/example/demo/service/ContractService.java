@@ -4,10 +4,9 @@ import com.example.demo.entity.Contract;
 import java.util.List;
 
 public interface ContractService {
-
-    Contract create(Contract contract);
-
-    List<Contract> getAll();
-
-    Contract getById(Long id);
+    Contract createContract(Contract contract);
+    Contract updateContract(Long id, Contract contract);
+    Contract getContractById(Long id);
+    List<Contract> getAllContracts();
+    void updateContractStatus(Long contractId);
 }
