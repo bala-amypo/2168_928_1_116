@@ -10,51 +10,40 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String contractNumber;
+
     private String title;
+
     private String counterpartyName;
 
     private LocalDate agreedDeliveryDate;
 
     private BigDecimal baseContractValue;
 
-    private String status;
+    private String status; // ACTIVE, COMPLETED, BREACHED
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-}
+    private LocalDateTime createdAt;
 
-    /* ================= GETTERS & SETTERS ================= */
+    private LocalDateTime updatedAt;
 
-    public Long getId() { return id; }
-
-    public String getContractNumber() { return contractNumber; }
-    public void setContractNumber(String contractNumber) { this.contractNumber = contractNumber; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getCounterpartyName() { return counterpartyName; }
-    public void setCounterpartyName(String counterpartyName) { this.counterpartyName = counterpartyName; }
-
-    public LocalDate getAgreedDeliveryDate() { return agreedDeliveryDate; }
-    public void setAgreedDeliveryDate(LocalDate agreedDeliveryDate) {
-        this.agreedDeliveryDate = agreedDeliveryDate;
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public BigDecimal getBaseContractValue() { return baseContractValue; }
-    public void setBaseContractValue(BigDecimal baseContractValue) {
-        this.baseContractValue = baseContractValue;
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
-
-    public ContractStatus getStatus() { return status; }
-    public void setStatus(ContractStatus status) { this.status = status; }
 }

@@ -1,7 +1,7 @@
-package com.example.demo.entity;
+// package com.example.demo.entity;
 
-public enum ContractStatus {
-    ACTIVE,
-    COMPLETED,
-    BREACHED
-}
+// public enum ContractStatus {
+//     ACTIVE,
+//     COMPLETED,
+//     BREACHED
+// }

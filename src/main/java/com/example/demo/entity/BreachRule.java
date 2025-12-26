@@ -8,15 +8,16 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class BreachRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String ruleName;
 
     private BigDecimal penaltyPerDay;
