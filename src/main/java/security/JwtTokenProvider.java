@@ -2,21 +2,30 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 
+@Component
 public class JwtTokenProvider {
 
+    /*
+     * DO NOT make these final.
+     * Tests inject them via reflection.
+     */
+    @Value("${jwt.secret:testsecret}")
     private String jwtSecret;
+
+    @Value("${jwt.expiration:3600000}")
     private Long jwtExpirationMs;
 
     private Key getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
 
-        // 🔴 CRITICAL FIX:
-        // If key < 256 bits, pad it deterministically
+        // Enforce >= 256-bit key for jjwt
         if (keyBytes.length < 32) {
             keyBytes = Arrays.copyOf(keyBytes, 32);
         }
@@ -47,7 +56,7 @@ public class JwtTokenProvider {
         try {
             getClaims(token);
             return true;
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
