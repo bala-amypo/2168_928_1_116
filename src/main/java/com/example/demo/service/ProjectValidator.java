@@ -2,6 +2,9 @@ package com.example.demo.service.validation;
 
 import com.example.demo.entity.*;
 
+import java.math.BigDecimal;
+import java.util.Set;
+
 public class ProjectValidator {
 
     /* ================= CONTRACT ================= */
@@ -20,8 +23,9 @@ public class ProjectValidator {
             throw new RuntimeException("Agreed delivery date is required");
         }
 
-        if (contract.getBaseContractValue() == null) {
-            throw new RuntimeException("Base contract value is required");
+        if (contract.getBaseContractValue() == null ||
+                contract.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Base contract value must be greater than zero");
         }
     }
 
@@ -54,12 +58,15 @@ public class ProjectValidator {
             throw new RuntimeException("Rule name is required");
         }
 
-        if (rule.getPenaltyPerDay() == null) {
-            throw new RuntimeException("Penalty per day is required");
+        if (rule.getPenaltyPerDay() == null ||
+                rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Penalty per day must be greater than zero");
         }
 
-        if (rule.getMaxPenaltyPercentage() == null) {
-            throw new RuntimeException("Max penalty percentage is required");
+        if (rule.getMaxPenaltyPercentage() == null ||
+                rule.getMaxPenaltyPercentage() <= 0 ||
+                rule.getMaxPenaltyPercentage() > 100) {
+            throw new RuntimeException("Invalid max penalty percentage");
         }
     }
 
@@ -75,8 +82,13 @@ public class ProjectValidator {
             throw new RuntimeException("Contract is required for penalty calculation");
         }
 
-        if (calc.getDaysDelayed() < 0) {
+        if (calc.getDaysDelayed() == null || calc.getDaysDelayed() < 0) {
             throw new RuntimeException("Days delayed cannot be negative");
+        }
+
+        if (calc.getCalculatedPenalty() == null ||
+                calc.getCalculatedPenalty().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Calculated penalty must be non-negative");
         }
     }
 
@@ -92,8 +104,9 @@ public class ProjectValidator {
             throw new RuntimeException("Contract is required for breach report");
         }
 
-        if (report.getPenaltyAmount() == null) {
-            throw new RuntimeException("Penalty amount is required");
+        if (report.getPenaltyAmount() == null ||
+                report.getPenaltyAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Penalty amount must be non-negative");
         }
     }
 
@@ -105,16 +118,18 @@ public class ProjectValidator {
             throw new RuntimeException("User cannot be null");
         }
 
-        if (user.getUsername() == null || user.getUsername().isBlank()) {
-            throw new RuntimeException("Username is required");
-        }
-
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new RuntimeException("Email is required");
         }
 
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            throw new RuntimeException("Role is required");
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new RuntimeException("Password is required");
+        }
+
+        Set<String> roles = user.getRoles();
+
+        if (roles == null || roles.isEmpty()) {
+            throw new RuntimeException("At least one role is required");
         }
     }
 }
