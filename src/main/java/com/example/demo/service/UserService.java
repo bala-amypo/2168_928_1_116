@@ -7,11 +7,11 @@ public interface UserService {
 
     User create(User user);
 
-    List<User> getAll();
+    User update(Long id, User user);
 
     User getById(Long id);
 
-    User update(Long id, User user);
+    List<User> getAll();
 
     void delete(Long id);
 }
