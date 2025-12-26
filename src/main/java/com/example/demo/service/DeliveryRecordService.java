@@ -1,16 +1,16 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.DeliveryRecord;
+// import com.example.demo.entity.DeliveryRecord;
 
-import java.util.List;
+// import java.util.List;
 
-public interface DeliveryRecordService {
+// public interface DeliveryRecordService {
 
-    DeliveryRecord createDeliveryRecord(DeliveryRecord record);
+//     DeliveryRecord createDeliveryRecord(DeliveryRecord record);
 
-    DeliveryRecord getLatestDeliveryRecord(Long contractId);
+//     DeliveryRecord getLatestDeliveryRecord(Long contractId);
 
-    DeliveryRecord getRecordById(Long id);
+//     DeliveryRecord getRecordById(Long id);
 
-    List<DeliveryRecord> getDeliveryRecordsForContract(Long contractId);
-}
+//     List<DeliveryRecord> getDeliveryRecordsForContract(Long contractId);
+// }

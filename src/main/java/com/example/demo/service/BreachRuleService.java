@@ -1,12 +1,12 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.BreachRule;
+// import com.example.demo.entity.BreachRule;
 
-import java.util.List;
+// import java.util.List;
 
-public interface BreachRuleService {
+// public interface BreachRuleService {
 
-    BreachRule getActiveRule();
+//     BreachRule getActiveRule();
 
-    List<BreachRule> getAllRules();
-}
+//     List<BreachRule> getAllRules();
+// }
