@@ -1,10 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.BreachRule;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import java.util.*;
 
-public interface BreachRuleRepository extends JpaRepository<BreachRule, Long> {
-
-    Optional<BreachRule> findFirstByActiveTrueOrderByIsDefaultRuleDesc();
+public interface BreachRuleRepository {
+    BreachRule save(BreachRule rule);
+    Optional<BreachRule> findById(long id);
+    List<BreachRule> findAll();
 }
