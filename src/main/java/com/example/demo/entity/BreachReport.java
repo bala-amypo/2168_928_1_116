@@ -3,12 +3,10 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,16 +19,17 @@ public class BreachReport {
     @ManyToOne
     private Contract contract;
 
-    private LocalDateTime reportGeneratedAt;
+    private long daysDelayed;
 
-    private Integer daysDelayed;
-
-    private BigDecimal penaltyAmount;
+    // MUST be double
+    private double penaltyAmount;
 
     private String remarks;
 
+    private LocalDateTime reportGeneratedAt;
+
     @PrePersist
     public void onCreate() {
-        reportGeneratedAt = LocalDateTime.now();
+        this.reportGeneratedAt = LocalDateTime.now();
     }
 }
