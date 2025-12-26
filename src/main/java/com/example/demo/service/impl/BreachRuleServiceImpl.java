@@ -1,28 +1,22 @@
-// package com.example.demo.service.impl;
+package com.example.demo.service.impl;
 
-// import com.example.demo.entity.BreachRule;
-// import com.example.demo.repository.BreachRuleRepository;
-// import com.example.demo.service.BreachRuleService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.stereotype.Service;
+import com.example.demo.entity.BreachRule;
+import com.example.demo.repository.BreachRuleRepository;
+import com.example.demo.service.BreachRuleService;
+import org.springframework.stereotype.Service;
 
-// import java.util.List;
+@Service
+public class BreachRuleServiceImpl implements BreachRuleService {
 
-// @Service
-// @RequiredArgsConstructor
-// public class BreachRuleServiceImpl implements BreachRuleService {
+    private final BreachRuleRepository repository;
 
-//     private final BreachRuleRepository breachRuleRepository;
+    public BreachRuleServiceImpl(BreachRuleRepository repository) {
+        this.repository = repository;
+    }
 
-//     @Override
-//     public BreachRule getActiveRule() {
-//         return breachRuleRepository
-//                 .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-//                 .orElseThrow(() -> new RuntimeException("Rule not found"));
-//     }
-
-//     @Override
-//     public List<BreachRule> getAllRules() {
-//         return breachRuleRepository.findAll();
-//     }
-// }
+    @Override
+    public BreachRule getActiveRule() {
+        return repository.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
+                .orElseThrow(() -> new RuntimeException("No active breach rule"));
+    }
+}
