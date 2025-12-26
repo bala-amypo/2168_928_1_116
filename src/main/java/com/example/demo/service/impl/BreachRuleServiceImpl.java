@@ -4,65 +4,45 @@ import com.example.demo.entity.BreachRule;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    private final BreachRuleRepository repository;
-
-    public BreachRuleServiceImpl(BreachRuleRepository repository) {
-        this.repository = repository;
-    }
+    private BreachRuleRepository breachRuleRepository;
 
     @Override
     public BreachRule createRule(BreachRule rule) {
-
-        if (rule.isDefaultRule()) {
-            repository.findAll().forEach(r -> {
-                if (r.isDefaultRule()) {
-                    r.setDefaultRule(false);
-                    repository.save(r);
-                }
-            });
+        if (rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Penalty per day must be greater than zero");
         }
-
-        return repository.save(rule);
-    }
-
-    @Override
-    public BreachRule updateRule(Long id, BreachRule rule) {
-        BreachRule existing = getRuleById(id);
-        existing.setPenaltyPerDay(rule.getPenaltyPerDay());
-        existing.setMaxPenaltyPercentage(rule.getMaxPenaltyPercentage());
-        existing.setActive(rule.isActive());
-        existing.setDefaultRule(rule.isDefaultRule());
-        return repository.save(existing);
-    }
-
-    @Override
-    public List<BreachRule> getAllRules() {
-        return repository.findAll();
-    }
-
-    @Override
-    public BreachRule getRuleById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
+        if (rule.getMaxPenaltyPercentage() <= 0 || rule.getMaxPenaltyPercentage() > 100) {
+            throw new IllegalArgumentException("Invalid max penalty percentage");
+        }
+        return breachRuleRepository.save(rule);
     }
 
     @Override
     public void deactivateRule(Long id) {
-        BreachRule rule = getRuleById(id);
+        BreachRule rule = breachRuleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
         rule.setActive(false);
-        repository.save(rule);
+        breachRuleRepository.save(rule);
     }
 
     @Override
     public BreachRule getActiveDefaultOrFirst() {
-        return repository.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
+        return breachRuleRepository.findFirstByActiveTrueOrderByIsDefaultRuleDesc()
                 .orElseThrow(() -> new ResourceNotFoundException("No active breach rule"));
+    }
+
+    @Override
+    public List<BreachRule> getAllRules() {
+        return breachRuleRepository.findAll();
     }
 }
