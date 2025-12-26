@@ -41,9 +41,11 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
 
         int daysDelayed = (int) Math.max(daysBetween, 0);
 
+        // penalty = penaltyPerDay * daysDelayed
         BigDecimal penalty = rule.getPenaltyPerDay()
                 .multiply(BigDecimal.valueOf(daysDelayed));
 
+        // maxPenalty = baseContractValue * (percentage / 100)
         BigDecimal maxPenalty = contract.getBaseContractValue()
                 .multiply(
                         BigDecimal.valueOf(rule.getMaxPenaltyPercentage())

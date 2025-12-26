@@ -1,4 +1,4 @@
-package com.example.demo.service.validation;
+package com.example.demo.service;
 
 import com.example.demo.entity.*;
 
@@ -66,27 +66,6 @@ public class ProjectValidator {
                 rule.getMaxPenaltyPercentage() <= 0 ||
                 rule.getMaxPenaltyPercentage() > 100) {
             throw new RuntimeException("Invalid max penalty percentage");
-        }
-    }
-
-    /* ================= USER ================= */
-
-    public static void validateUser(User user) {
-
-        if (user == null) {
-            throw new RuntimeException("User cannot be null");
-        }
-
-        if (user.getUsername() == null || user.getUsername().isBlank()) {
-            throw new RuntimeException("Username is required");
-        }
-
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
-        }
-
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            throw new RuntimeException("Role is required");
         }
     }
 }
