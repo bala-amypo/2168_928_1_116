@@ -1,10 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.BreachReport;
-import java.util.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
 
-public interface BreachReportRepository {
-    BreachReport save(BreachReport report);
-    Optional<BreachReport> findById(long id);
-    List<BreachReport> findAll();
+@Repository
+public interface BreachReportRepository extends JpaRepository<BreachReport, Long> {
+    List<BreachReport> findByContractId(Long contractId);
 }
