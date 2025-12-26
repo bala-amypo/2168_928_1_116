@@ -1,14 +1,8 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.BreachRule;
-import com.example.demo.entity.Contract;
-import com.example.demo.entity.DeliveryRecord;
-import com.example.demo.entity.PenaltyCalculation;
+import com.example.demo.entity.*;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.BreachRuleRepository;
-import com.example.demo.repository.ContractRepository;
-import com.example.demo.repository.DeliveryRecordRepository;
-import com.example.demo.repository.PenaltyCalculationRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.PenaltyCalculationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PenaltyCalculationServiceImpl implements PenaltyCalculationService {
 
-    // MUST be final for Lombok @RequiredArgsConstructor
     private final ContractRepository contractRepository;
     private final DeliveryRecordRepository deliveryRecordRepository;
     private final BreachRuleRepository breachRuleRepository;
@@ -44,18 +37,17 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
                 .orElseThrow(() ->
                         new ResourceNotFoundException("No active breach rule"));
 
-        long diffDays = ChronoUnit.DAYS.between(
+        long daysBetween = ChronoUnit.DAYS.between(
                 contract.getAgreedDeliveryDate(),
                 delivery.getDeliveryDate()
         );
 
-        int daysDelayed = (int) Math.max(diffDays, 0);
+        int daysDelayed = (int) Math.max(daysBetween, 0);
 
-        // penaltyPerDay is BigDecimal
-        BigDecimal penalty = rule.getPenaltyPerDay()
+        // Double → BigDecimal conversion
+        BigDecimal penalty = BigDecimal.valueOf(rule.getPenaltyPerDay())
                 .multiply(BigDecimal.valueOf(daysDelayed));
 
-        // maxPenaltyPercentage is Double
         BigDecimal maxPenalty = contract.getBaseContractValue()
                 .multiply(
                         BigDecimal.valueOf(rule.getMaxPenaltyPercentage())
@@ -66,14 +58,14 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
             penalty = maxPenalty;
         }
 
-        PenaltyCalculation calculation = PenaltyCalculation.builder()
+        PenaltyCalculation calc = PenaltyCalculation.builder()
                 .contract(contract)
                 .daysDelayed(daysDelayed)
                 .calculatedPenalty(penalty)
                 .appliedRule(rule)
                 .build();
 
-        return penaltyCalculationRepository.save(calculation);
+        return penaltyCalculationRepository.save(calc);
     }
 
     @Override

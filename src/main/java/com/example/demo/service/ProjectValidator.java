@@ -1,135 +1,86 @@
-package com.example.demo.service.validation;
+// package com.example.demo.service.validation;
 
-import com.example.demo.entity.*;
+// import com.example.demo.entity.*;
 
-import java.math.BigDecimal;
-import java.util.Set;
+// import java.math.BigDecimal;
 
-public class ProjectValidator {
+// public class ProjectValidator {
 
-    /* ================= CONTRACT ================= */
+//     public static void validateContract(Contract contract) {
+//         if (contract == null)
+//             throw new RuntimeException("Contract cannot be null");
 
-    public static void validateContract(Contract contract) {
+//         if (contract.getContractNumber() == null || contract.getContractNumber().isBlank())
+//             throw new RuntimeException("Contract number is required");
 
-        if (contract == null) {
-            throw new RuntimeException("Contract cannot be null");
-        }
+//         if (contract.getAgreedDeliveryDate() == null)
+//             throw new RuntimeException("Agreed delivery date is required");
 
-        if (contract.getContractNumber() == null || contract.getContractNumber().isBlank()) {
-            throw new RuntimeException("Contract number is required");
-        }
+//         if (contract.getBaseContractValue() == null ||
+//                 contract.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0)
+//             throw new RuntimeException("Base contract value must be greater than zero");
+//     }
 
-        if (contract.getAgreedDeliveryDate() == null) {
-            throw new RuntimeException("Agreed delivery date is required");
-        }
+//     public static void validateDeliveryRecord(DeliveryRecord record) {
+//         if (record == null)
+//             throw new RuntimeException("Delivery record cannot be null");
 
-        if (contract.getBaseContractValue() == null ||
-                contract.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Base contract value must be greater than zero");
-        }
-    }
+//         if (record.getContract() == null)
+//             throw new RuntimeException("Contract is required");
 
-    /* ================= DELIVERY RECORD ================= */
+//         if (record.getDeliveryDate() == null)
+//             throw new RuntimeException("Delivery date is required");
+//     }
 
-    public static void validateDeliveryRecord(DeliveryRecord record) {
+//     public static void validateBreachRule(BreachRule rule) {
+//         if (rule == null)
+//             throw new RuntimeException("Breach rule cannot be null");
 
-        if (record == null) {
-            throw new RuntimeException("Delivery record cannot be null");
-        }
+//         if (rule.getRuleName() == null || rule.getRuleName().isBlank())
+//             throw new RuntimeException("Rule name is required");
 
-        if (record.getContract() == null) {
-            throw new RuntimeException("Contract is mandatory for delivery record");
-        }
+//         if (rule.getPenaltyPerDay() <= 0)
+//             throw new RuntimeException("Penalty per day must be positive");
 
-        if (record.getDeliveryDate() == null) {
-            throw new RuntimeException("Delivery date is required");
-        }
-    }
+//         if (rule.getMaxPenaltyPercentage() <= 0 ||
+//                 rule.getMaxPenaltyPercentage() > 100)
+//             throw new RuntimeException("Invalid max penalty percentage");
+//     }
 
-    /* ================= BREACH RULE ================= */
+//     public static void validatePenaltyCalculation(PenaltyCalculation calc) {
+//         if (calc == null)
+//             throw new RuntimeException("Penalty calculation cannot be null");
 
-    public static void validateBreachRule(BreachRule rule) {
+//         if (calc.getContract() == null)
+//             throw new RuntimeException("Contract is required");
 
-        if (rule == null) {
-            throw new RuntimeException("Breach rule cannot be null");
-        }
+//         if (calc.getDaysDelayed() < 0)
+//             throw new RuntimeException("Days delayed cannot be negative");
+//     }
 
-        if (rule.getRuleName() == null || rule.getRuleName().isBlank()) {
-            throw new RuntimeException("Rule name is required");
-        }
+//     public static void validateBreachReport(BreachReport report) {
+//         if (report == null)
+//             throw new RuntimeException("Breach report cannot be null");
 
-        if (rule.getPenaltyPerDay() == null ||
-                rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Penalty per day must be greater than zero");
-        }
+//         if (report.getContract() == null)
+//             throw new RuntimeException("Contract is required");
 
-        if (rule.getMaxPenaltyPercentage() == null ||
-                rule.getMaxPenaltyPercentage() <= 0 ||
-                rule.getMaxPenaltyPercentage() > 100) {
-            throw new RuntimeException("Invalid max penalty percentage");
-        }
-    }
+//         if (report.getPenaltyAmount() == null ||
+//                 report.getPenaltyAmount().compareTo(BigDecimal.ZERO) < 0)
+//             throw new RuntimeException("Penalty amount must be non-negative");
+//     }
 
-    /* ================= PENALTY CALCULATION ================= */
+//     public static void validateUser(User user) {
+//         if (user == null)
+//             throw new RuntimeException("User cannot be null");
 
-    public static void validatePenaltyCalculation(PenaltyCalculation calc) {
+//         if (user.getEmail() == null || user.getEmail().isBlank())
+//             throw new RuntimeException("Email is required");
 
-        if (calc == null) {
-            throw new RuntimeException("Penalty calculation cannot be null");
-        }
+//         if (user.getPassword() == null || user.getPassword().isBlank())
+//             throw new RuntimeException("Password is required");
 
-        if (calc.getContract() == null) {
-            throw new RuntimeException("Contract is required for penalty calculation");
-        }
-
-        if (calc.getDaysDelayed() == null || calc.getDaysDelayed() < 0) {
-            throw new RuntimeException("Days delayed cannot be negative");
-        }
-
-        if (calc.getCalculatedPenalty() == null ||
-                calc.getCalculatedPenalty().compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Calculated penalty must be non-negative");
-        }
-    }
-
-    /* ================= BREACH REPORT ================= */
-
-    public static void validateBreachReport(BreachReport report) {
-
-        if (report == null) {
-            throw new RuntimeException("Breach report cannot be null");
-        }
-
-        if (report.getContract() == null) {
-            throw new RuntimeException("Contract is required for breach report");
-        }
-
-        if (report.getPenaltyAmount() == null ||
-                report.getPenaltyAmount().compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Penalty amount must be non-negative");
-        }
-    }
-
-    /* ================= USER ================= */
-
-    public static void validateUser(User user) {
-
-        if (user == null) {
-            throw new RuntimeException("User cannot be null");
-        }
-
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
-        }
-
-        if (user.getPassword() == null || user.getPassword().isBlank()) {
-            throw new RuntimeException("Password is required");
-        }
-
-        Set<String> roles = user.getRoles();
-
-        if (roles == null || roles.isEmpty()) {
-            throw new RuntimeException("At least one role is required");
-        }
-    }
-}
+//         if (user.getRole() == null || user.getRole().isBlank())
+//             throw new RuntimeException("Role is required");
+//     }
+// }
