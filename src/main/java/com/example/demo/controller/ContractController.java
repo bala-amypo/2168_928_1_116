@@ -2,43 +2,43 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Contract;
 import com.example.demo.service.ContractService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/contracts")
+@RequiredArgsConstructor
+@Tag(name = "Contracts")
 public class ContractController {
 
     private final ContractService contractService;
 
-    public ContractController(ContractService contractService) {
-        this.contractService = contractService;
-    }
-
     @PostMapping
-    public Contract createContract(@RequestBody Contract contract) {
+    public Contract create(@RequestBody Contract contract) {
         return contractService.createContract(contract);
     }
 
-    @PutMapping("/{id}")
-    public Contract updateContract(@PathVariable Long id,
-                                   @RequestBody Contract contract) {
-        return contractService.updateContract(id, contract);
-    }
-
     @GetMapping("/{id}")
-    public Contract getContract(@PathVariable Long id) {
+    public Contract getById(@PathVariable Long id) {
         return contractService.getContractById(id);
     }
 
     @GetMapping
-    public List<Contract> getAllContracts() {
+    public List<Contract> getAll() {
         return contractService.getAllContracts();
     }
 
-    @PutMapping("/{id}/update-status")
-    public Contract updateStatus(@PathVariable Long id) {
-        return contractService.updateContractStatus(id);
+    @PutMapping("/{id}")
+    public Contract update(@PathVariable Long id,
+                           @RequestBody Contract contract) {
+        return contractService.updateContract(id, contract);
+    }
+
+    @PutMapping("/{id}/status")
+    public void updateStatus(@PathVariable Long id) {
+        contractService.updateContractStatus(id);
     }
 }
