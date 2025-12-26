@@ -37,7 +37,7 @@ public class OpenApiConfig {
              * No hardcoding. No browser localhost bug.
              */
             .servers(List.of(
-                new Server().url("/")
+                new Server().url("https://9182.408procr.amypo.ai/")
             ))
 
             .addSecurityItem(
