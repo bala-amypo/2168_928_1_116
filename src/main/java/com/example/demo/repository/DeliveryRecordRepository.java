@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryRecordRepository extends JpaRepository<DeliveryRecord, Long> {
-
-    Optional<DeliveryRecord> findFirstByContractIdOrderByDeliveryDateDesc(Long contractId);
-
-    List<DeliveryRecord> findByContractIdOrderByDeliveryDateAsc(Long contractId);
+    Optional<DeliveryRecord> findFirstByContractIdOrderByDeliveryDateDesc(Long id);
+    List<DeliveryRecord> findByContractIdOrderByDeliveryDateAsc(Long id);
 }

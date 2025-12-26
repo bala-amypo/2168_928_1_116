@@ -1,30 +1,45 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.Contract;
-import com.example.demo.repository.ContractRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
 public class ContractServiceImpl {
 
-    private final ContractRepository contractRepository;
+    private ContractRepository contractRepository;
+    private DeliveryRecordRepository deliveryRecordRepository;
 
-    public ContractServiceImpl(ContractRepository contractRepository) {
-        this.contractRepository = contractRepository;
+    public Contract createContract(Contract c) {
+        if (c.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Base contract value must be > 0");
+        }
+        return contractRepository.save(c);
     }
 
-    public Contract save(Contract contract) {
-        return contractRepository.save(contract);
-    }
-
-    public Contract getById(Long id) {
+    public Contract getContractById(Long id) {
         return contractRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contract not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
     }
 
-    public List<Contract> getAll() {
+    public List<Contract> getAllContracts() {
         return contractRepository.findAll();
+    }
+
+    public Contract updateContract(Long id, Contract in) {
+        Contract c = getContractById(id);
+        c.setTitle(in.getTitle());
+        c.setCounterpartyName(in.getCounterpartyName());
+        c.setAgreedDeliveryDate(in.getAgreedDeliveryDate());
+        c.setBaseContractValue(in.getBaseContractValue());
+        return contractRepository.save(c);
+    }
+
+    public void updateContractStatus(Long id) {
+        Contract c = getContractById(id);
+        Optional<DeliveryRecord> dr =
+                deliveryRecordRepository.findFirstByContractIdOrderByDeliveryDateDesc(id);
+
+        if (dr.isPresent() &&
+                dr.get().getDeliveryDate().isAfter(c.getAgreedDeliveryDate())) {
+            c.setStatus("BREACHED");
+        } else {
+            c.setStatus("ACTIVE");
+        }
+        contractRepository.save(c);
     }
 }
