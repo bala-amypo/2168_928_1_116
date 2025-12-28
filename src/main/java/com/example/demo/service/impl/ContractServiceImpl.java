@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Contract;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
+import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class ContractServiceImpl implements ContractService {
 
     // REQUIRED for TestUtils.injectField
     ContractRepository contractRepository;
+
+    // REQUIRED EVEN IF UNUSED — tests inject this
+    DeliveryRecordRepository deliveryRecordRepository;
 
     // REQUIRED no-args constructor
     public ContractServiceImpl() {
@@ -52,7 +56,6 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
 
-        // Test expects this exact behavior
         if ("BREACHED".equalsIgnoreCase(contract.getStatus())) {
             contract.setStatus("BREACHED");
         } else {
