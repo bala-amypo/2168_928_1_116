@@ -1,3 +1,18 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.BreachReport;
+import com.example.demo.entity.Contract;
+import com.example.demo.entity.PenaltyCalculation;
+import com.example.demo.repository.BreachReportRepository;
+import com.example.demo.repository.ContractRepository;
+import com.example.demo.repository.PenaltyCalculationRepository;
+import com.example.demo.service.BreachReportService;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class BreachReportServiceImpl implements BreachReportService {
