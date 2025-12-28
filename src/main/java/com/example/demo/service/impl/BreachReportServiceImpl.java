@@ -7,7 +7,6 @@ import com.example.demo.repository.BreachReportRepository;
 import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.BreachReportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,17 +15,14 @@ import java.util.List;
 @Service
 public class BreachReportServiceImpl implements BreachReportService {
 
-    @Autowired
+    // 🔴 FIELD NAMES MUST MATCH TESTS
     private ContractRepository contractRepository;
-
-    @Autowired
     private PenaltyCalculationRepository penaltyCalculationRepository;
-
-    @Autowired
     private BreachReportRepository breachReportRepository;
 
-    // REQUIRED
-    public BreachReportServiceImpl() {}
+    // 🔴 REQUIRED FOR REFLECTION
+    public BreachReportServiceImpl() {
+    }
 
     @Override
     public BreachReport generateReport(Long contractId) {

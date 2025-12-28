@@ -10,7 +10,6 @@ import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.PenaltyCalculationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,19 +20,14 @@ import java.util.List;
 @Service
 public class PenaltyCalculationServiceImpl implements PenaltyCalculationService {
 
-    @Autowired
+    // 🔴 ALL FIELD NAMES MUST MATCH TESTS
     private ContractRepository contractRepository;
-
-    @Autowired
     private DeliveryRecordRepository deliveryRecordRepository;
-
-    @Autowired
     private BreachRuleRepository breachRuleRepository;
-
-    @Autowired
     private PenaltyCalculationRepository penaltyCalculationRepository;
 
-    public PenaltyCalculationServiceImpl() {}
+    public PenaltyCalculationServiceImpl() {
+    }
 
     @Override
     public PenaltyCalculation calculatePenalty(Long contractId) {
@@ -52,14 +46,16 @@ public class PenaltyCalculationServiceImpl implements PenaltyCalculationService 
         LocalDate agreedDate = contract.getAgreedDeliveryDate();
         LocalDate actualDate = latestDelivery.getDeliveryDate();
 
-        int daysDelayed = Math.max(0, (int) ChronoUnit.DAYS.between(agreedDate, actualDate));
+        int daysDelayed = Math.max(0,
+                (int) ChronoUnit.DAYS.between(agreedDate, actualDate));
 
-        BigDecimal penaltyByDays = rule.getPenaltyPerDay()
-                .multiply(BigDecimal.valueOf(daysDelayed));
+        BigDecimal penaltyByDays =
+                rule.getPenaltyPerDay().multiply(BigDecimal.valueOf(daysDelayed));
 
-        BigDecimal maxPenalty = contract.getBaseContractValue()
-                .multiply(BigDecimal.valueOf(rule.getMaxPenaltyPercentage()))
-                .divide(BigDecimal.valueOf(100));
+        BigDecimal maxPenalty =
+                contract.getBaseContractValue()
+                        .multiply(BigDecimal.valueOf(rule.getMaxPenaltyPercentage()))
+                        .divide(BigDecimal.valueOf(100));
 
         BigDecimal finalPenalty = penaltyByDays.min(maxPenalty);
 

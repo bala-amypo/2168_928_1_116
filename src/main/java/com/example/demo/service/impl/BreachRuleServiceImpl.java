@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.BreachRule;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,17 +11,18 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    @Autowired
+    // 🔴 EXACT FIELD NAME
     private BreachRuleRepository breachRuleRepository;
 
-    public BreachRuleServiceImpl() {}
+    public BreachRuleServiceImpl() {
+    }
 
     @Override
     public BreachRule createRule(BreachRule rule) {
         rule.setId(null);
 
         if (rule.getPenaltyPerDay() == null ||
-            rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
+                rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Penalty per day must be greater than zero");
         }
 
