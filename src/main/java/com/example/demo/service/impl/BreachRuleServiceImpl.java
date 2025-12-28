@@ -11,23 +11,22 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    private BreachRuleRepository breachRuleRepository;
+    private final BreachRuleRepository breachRuleRepository;
+
+    // ✅ THIS WAS MISSING
+    public BreachRuleServiceImpl(BreachRuleRepository breachRuleRepository) {
+        this.breachRuleRepository = breachRuleRepository;
+    }
 
     @Override
     public BreachRule createRule(BreachRule rule) {
 
-        // ID must be null for CREATE
+        // CREATE must NOT have ID
         rule.setId(null);
 
-        // Validation — REQUIRED BY TESTS
         if (rule.getPenaltyPerDay() == null ||
             rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Penalty per day must be greater than zero");
-        }
-
-        if (rule.getMaxPenaltyPercentage() != null &&
-            rule.getMaxPenaltyPercentage() > 100) {
-            throw new IllegalArgumentException("Max penalty percentage invalid");
         }
 
         return breachRuleRepository.save(rule);
@@ -35,7 +34,6 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule updateRule(Long id, BreachRule rule) {
-
         BreachRule existing = breachRuleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rule not found"));
 
@@ -63,7 +61,6 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     public void deactivateRule(Long id) {
         BreachRule rule = breachRuleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rule not found"));
-
         rule.setActive(false);
         breachRuleRepository.save(rule);
     }
@@ -72,6 +69,6 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     public BreachRule getActiveDefaultOrFirst() {
         return breachRuleRepository
                 .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseThrow(() -> new RuntimeException("No active breach rule"));
+                .orElseThrow(() -> new RuntimeException("No active rule"));
     }
 }
