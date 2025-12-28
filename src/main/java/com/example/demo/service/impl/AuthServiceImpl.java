@@ -1,3 +1,17 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Set;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -5,22 +19,21 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponse register(AuthRequest request) {
-
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new RuntimeException("Email already registered");
         }
 
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(Set.of("ROLE_USER"))   // 🔥 THIS IS THE FIX
+                .roles(Set.of("ROLE_USER"))
                 .build();
 
         userRepository.save(user);
@@ -36,7 +49,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(AuthRequest request) {
-
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
