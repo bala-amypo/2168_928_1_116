@@ -1,21 +1,55 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.service.AuthService;
-import org.springframework.stereotype.Service;
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @Override
     public AuthResponse register(AuthRequest request) {
-        // Minimal logic — tests don't care about real auth
-        return new AuthResponse("dummy-token");
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(Set.of("ROLE_USER"))   // 🔥 THIS IS THE FIX
+                .build();
+
+        userRepository.save(user);
+
+        String token = jwtTokenProvider.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRoles()
+        );
+
+        return new AuthResponse(token);
     }
 
     @Override
     public AuthResponse login(AuthRequest request) {
-        return new AuthResponse("dummy-token");
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        String token = jwtTokenProvider.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRoles()
+        );
+
+        return new AuthResponse(token);
     }
 }
