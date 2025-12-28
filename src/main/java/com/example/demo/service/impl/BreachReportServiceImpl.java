@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +41,21 @@ public class BreachReportServiceImpl implements BreachReportService {
                 .build();
 
         return breachReportRepository.save(report);
+    }
+
+    @Override
+    public List<BreachReport> getAllReports() {
+        return breachReportRepository.findAll();
+    }
+
+    @Override
+    public List<BreachReport> getReportsForContract(Long contractId) {
+        return breachReportRepository.findByContractId(contractId);
+    }
+
+    @Override
+    public BreachReport getReportById(Long id) {
+        return breachReportRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Report not found"));
     }
 }
