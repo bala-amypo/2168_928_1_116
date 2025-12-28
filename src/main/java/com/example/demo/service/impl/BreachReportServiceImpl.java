@@ -3,7 +3,7 @@
 public class BreachReportServiceImpl implements BreachReportService {
 
     private final ContractRepository contractRepository;
-    private final BreachRuleRepository breachRuleRepository;
+    private final PenaltyCalculationRepository penaltyCalculationRepository;
     private final BreachReportRepository breachReportRepository;
 
     @Override
@@ -12,33 +12,16 @@ public class BreachReportServiceImpl implements BreachReportService {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new RuntimeException("Contract not found"));
 
-        BreachRule rule = breachRuleRepository
-                .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseThrow(() -> new RuntimeException("No active breach rule"));
-
-        long daysDelayed = ChronoUnit.DAYS.between(
-                contract.getAgreedDeliveryDate(),
-                LocalDate.now()
-        );
-
-        if (daysDelayed < 0) daysDelayed = 0;
-
-        BigDecimal penalty = rule.getPenaltyPerDay()
-                .multiply(BigDecimal.valueOf(daysDelayed));
-
-        BigDecimal maxPenalty = contract.getBaseContractValue()
-                .multiply(BigDecimal.valueOf(rule.getMaxPenaltyPercentage() / 100));
-
-        if (penalty.compareTo(maxPenalty) > 0) {
-            penalty = maxPenalty;
-        }
+        PenaltyCalculation calc = penaltyCalculationRepository
+                .findTopByContractIdOrderByCalculatedAtDesc(contractId)
+                .orElseThrow(() -> new RuntimeException("No penalty calculation"));
 
         BreachReport report = BreachReport.builder()
                 .contract(contract)
-                .daysDelayed(daysDelayed)
-                .penaltyAmount(penalty)
+                .daysDelayed(calc.getDaysDelayed())
+                .penaltyAmount(calc.getCalculatedPenalty())
                 .reportGeneratedAt(LocalDateTime.now())
-                .remarks(daysDelayed > 0 ? "Penalty applied" : "No delay")
+                .remarks(calc.getDaysDelayed() > 0 ? "Penalty applied" : "No delay")
                 .build();
 
         return breachReportRepository.save(report);
