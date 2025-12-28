@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    // 🔴 EXACT FIELD NAME
     private BreachRuleRepository breachRuleRepository;
 
     public BreachRuleServiceImpl() {
@@ -19,11 +18,19 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule createRule(BreachRule rule) {
+
         rule.setId(null);
 
         if (rule.getPenaltyPerDay() == null ||
                 rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Penalty per day must be greater than zero");
+            throw new IllegalArgumentException("Penalty per day must be > 0");
+        }
+
+        // 🔴 MISSING VALIDATION (TEST FAILURE)
+        if (rule.getMaxPenaltyPercentage() == null ||
+                rule.getMaxPenaltyPercentage() < 0 ||
+                rule.getMaxPenaltyPercentage() > 100) {
+            throw new IllegalArgumentException("Invalid percentage");
         }
 
         return breachRuleRepository.save(rule);
@@ -31,6 +38,7 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule updateRule(Long id, BreachRule rule) {
+
         BreachRule existing = breachRuleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rule not found"));
 
@@ -64,8 +72,12 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule getActiveDefaultOrFirst() {
+
+        // 🔴 TEST EXPECTS FALLBACK, NOT EXCEPTION
         return breachRuleRepository
                 .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseThrow(() -> new RuntimeException("No active rule"));
+                .orElseGet(() ->
+                        breachRuleRepository.findAll().stream().findFirst().orElse(null)
+                );
     }
 }
