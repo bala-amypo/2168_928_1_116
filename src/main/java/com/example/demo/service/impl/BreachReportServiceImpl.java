@@ -7,20 +7,26 @@ import com.example.demo.repository.BreachReportRepository;
 import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.PenaltyCalculationRepository;
 import com.example.demo.service.BreachReportService;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BreachReportServiceImpl implements BreachReportService {
 
-    private final ContractRepository contractRepository;
-    private final PenaltyCalculationRepository penaltyCalculationRepository;
-    private final BreachReportRepository breachReportRepository;
+    @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
+    private PenaltyCalculationRepository penaltyCalculationRepository;
+
+    @Autowired
+    private BreachReportRepository breachReportRepository;
+
+    // REQUIRED
+    public BreachReportServiceImpl() {}
 
     @Override
     public BreachReport generateReport(Long contractId) {

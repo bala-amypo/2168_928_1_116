@@ -1,7 +1,9 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Contract;
 import com.example.demo.repository.ContractRepository;
+import com.example.demo.service.ContractService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,11 +11,10 @@ import java.util.List;
 @Service
 public class ContractServiceImpl implements ContractService {
 
-    private final ContractRepository repository;
+    @Autowired
+    private ContractRepository repository;
 
-    public ContractServiceImpl(ContractRepository repository) {
-        this.repository = repository;
-    }
+    public ContractServiceImpl() {}
 
     @Override
     public Contract createContract(Contract contract) {

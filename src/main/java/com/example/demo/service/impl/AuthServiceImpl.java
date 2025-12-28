@@ -24,6 +24,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // REQUIRED FOR TESTS
+    public AuthServiceImpl() {}
+
     @Override
     public AuthResponse register(AuthRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {

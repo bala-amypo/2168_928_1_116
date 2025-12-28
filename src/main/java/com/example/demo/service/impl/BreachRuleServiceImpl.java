@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.BreachRule;
 import com.example.demo.repository.BreachRuleRepository;
 import com.example.demo.service.BreachRuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,17 +12,13 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    private final BreachRuleRepository breachRuleRepository;
+    @Autowired
+    private BreachRuleRepository breachRuleRepository;
 
-    // ✅ THIS WAS MISSING
-    public BreachRuleServiceImpl(BreachRuleRepository breachRuleRepository) {
-        this.breachRuleRepository = breachRuleRepository;
-    }
+    public BreachRuleServiceImpl() {}
 
     @Override
     public BreachRule createRule(BreachRule rule) {
-
-        // CREATE must NOT have ID
         rule.setId(null);
 
         if (rule.getPenaltyPerDay() == null ||
