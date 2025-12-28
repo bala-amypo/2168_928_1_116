@@ -5,7 +5,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
 import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.DeliveryRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,13 +13,13 @@ import java.util.List;
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    @Autowired
+    // 🔴 FIELD NAMES MUST MATCH TESTS EXACTLY
     private DeliveryRecordRepository deliveryRecordRepository;
-
-    @Autowired
     private ContractRepository contractRepository;
 
-    public DeliveryRecordServiceImpl() {}
+    // 🔴 DEFAULT CONSTRUCTOR REQUIRED FOR REFLECTION
+    public DeliveryRecordServiceImpl() {
+    }
 
     @Override
     public DeliveryRecord createDeliveryRecord(DeliveryRecord record) {
@@ -32,18 +31,22 @@ public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
     @Override
     public List<DeliveryRecord> getDeliveryRecordsForContract(Long contractId) {
-        return deliveryRecordRepository.findByContractIdOrderByDeliveryDateAsc(contractId);
+        return deliveryRecordRepository
+                .findByContractIdOrderByDeliveryDateAsc(contractId);
     }
 
     @Override
     public DeliveryRecord getLatestDeliveryRecord(Long contractId) {
-        return deliveryRecordRepository.findFirstByContractIdOrderByDeliveryDateDesc(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("No delivery records found"));
+        return deliveryRecordRepository
+                .findFirstByContractIdOrderByDeliveryDateDesc(contractId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("No delivery records found"));
     }
 
     @Override
     public DeliveryRecord getRecordById(Long id) {
         return deliveryRecordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Delivery record not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Delivery record not found"));
     }
 }

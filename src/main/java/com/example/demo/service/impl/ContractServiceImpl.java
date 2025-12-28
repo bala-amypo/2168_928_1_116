@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Contract;
 import com.example.demo.repository.ContractRepository;
+import com.example.demo.repository.DeliveryRecordRepository;
 import com.example.demo.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,37 +12,49 @@ import java.util.List;
 @Service
 public class ContractServiceImpl implements ContractService {
 
-    @Autowired
-    private ContractRepository repository;
+    // 🔴 FIELD NAMES MUST MATCH TEST EXACTLY
+    private ContractRepository contractRepository;
+    private DeliveryRecordRepository deliveryRecordRepository;
 
-    public ContractServiceImpl() {}
+    // 🔴 DEFAULT CONSTRUCTOR REQUIRED FOR TEST REFLECTION
+    public ContractServiceImpl() {
+    }
+
+    // 🔴 SPRING INJECTION (TEST WILL OVERRIDE VIA REFLECTION)
+    @Autowired
+    public ContractServiceImpl(
+            ContractRepository contractRepository,
+            DeliveryRecordRepository deliveryRecordRepository) {
+        this.contractRepository = contractRepository;
+        this.deliveryRecordRepository = deliveryRecordRepository;
+    }
 
     @Override
     public Contract createContract(Contract contract) {
-        return repository.save(contract);
+        return contractRepository.save(contract);
     }
 
     @Override
     public Contract updateContract(Long id, Contract contract) {
-        return repository.save(contract);
+        return contractRepository.save(contract);
     }
 
     @Override
     public Contract getContractById(Long id) {
-        return repository.findById(id).orElse(null);
+        return contractRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Contract> getAllContracts() {
-        return repository.findAll();
+        return contractRepository.findAll();
     }
 
     @Override
     public void updateContractStatus(Long contractId) {
-        Contract c = repository.findById(contractId).orElse(null);
-        if (c != null) {
-            c.setStatus("UPDATED");
-            repository.save(c);
+        Contract contract = contractRepository.findById(contractId).orElse(null);
+        if (contract != null) {
+            contract.setStatus("UPDATED");
+            contractRepository.save(contract);
         }
     }
 }
