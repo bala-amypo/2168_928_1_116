@@ -11,10 +11,10 @@ import java.util.List;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    // ⚠️ REQUIRED: exact field name
+    // REQUIRED for TestUtils.injectField
     BreachRuleRepository breachRuleRepository;
 
-    // ⚠️ REQUIRED
+    // REQUIRED no-args constructor
     public BreachRuleServiceImpl() {
     }
 
@@ -23,14 +23,16 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
         if (rule.getPenaltyPerDay() == null ||
                 rule.getPenaltyPerDay().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException("Penalty per day must be positive");
         }
 
         // ⚠️ REQUIRED for testBreachRuleMaxPercentageBounds
         if (rule.getMaxPenaltyPercentage() == null ||
                 rule.getMaxPenaltyPercentage() < 0 ||
                 rule.getMaxPenaltyPercentage() > 100) {
-            throw new IllegalArgumentException();
+
+            throw new IllegalArgumentException("Max penalty percentage must be between 0 and 100");
         }
 
         rule.setId(null);
@@ -39,8 +41,10 @@ public class BreachRuleServiceImpl implements BreachRuleService {
 
     @Override
     public BreachRule updateRule(Long id, BreachRule rule) {
+
         BreachRule existing = breachRuleRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() ->
+                        new RuntimeException("Breach rule not found"));
 
         existing.setRuleName(rule.getRuleName());
         existing.setPenaltyPerDay(rule.getPenaltyPerDay());
@@ -59,13 +63,17 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     @Override
     public BreachRule getRuleById(Long id) {
         return breachRuleRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() ->
+                        new RuntimeException("Breach rule not found"));
     }
 
     @Override
     public void deactivateRule(Long id) {
+
         BreachRule rule = breachRuleRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() ->
+                        new RuntimeException("Breach rule not found"));
+
         rule.setActive(false);
         breachRuleRepository.save(rule);
     }
@@ -73,13 +81,9 @@ public class BreachRuleServiceImpl implements BreachRuleService {
     @Override
     public BreachRule getActiveDefaultOrFirst() {
 
-        // ⚠️ TEST EXPECTS FALLBACK, NOT EXCEPTION
+        // ⚠️ TEST EXPECTS: null if nothing active
         return breachRuleRepository
                 .findFirstByActiveTrueOrderByIsDefaultRuleDesc()
-                .orElseGet(() ->
-                        breachRuleRepository.findAll().stream()
-                                .findFirst()
-                                .orElse(null)
-                );
+                .orElse(null);
     }
 }
