@@ -1,78 +1,59 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.Contract;
-import com.example.demo.entity.DeliveryRecord;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ContractRepository;
-import com.example.demo.repository.DeliveryRecordRepository;
-import com.example.demo.service.ContractService;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContractServiceImpl implements ContractService {
-    
-    private ContractRepository contractRepository;
-    private DeliveryRecordRepository deliveryRecordRepository;
-    
-    public ContractServiceImpl() {}
-    
-    public ContractServiceImpl(ContractRepository contractRepository, DeliveryRecordRepository deliveryRecordRepository) {
+
+    private final ContractRepository contractRepository;
+
+    public ContractServiceImpl(ContractRepository contractRepository) {
         this.contractRepository = contractRepository;
-        this.deliveryRecordRepository = deliveryRecordRepository;
     }
-    
+
     @Override
     public Contract createContract(Contract contract) {
-        if (contract.getBaseContractValue() == null || contract.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Base contract value must be greater than 0");
-        }
+        contract.setId(null); // VERY IMPORTANT — let DB generate ID
         return contractRepository.save(contract);
     }
-    
+
     @Override
     public Contract updateContract(Long id, Contract contract) {
         Contract existing = contractRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
-        
-        if (contract.getTitle() != null) existing.setTitle(contract.getTitle());
-        if (contract.getCounterpartyName() != null) existing.setCounterpartyName(contract.getCounterpartyName());
-        if (contract.getAgreedDeliveryDate() != null) existing.setAgreedDeliveryDate(contract.getAgreedDeliveryDate());
-        if (contract.getBaseContractValue() != null) existing.setBaseContractValue(contract.getBaseContractValue());
-        
+                .orElseThrow(() -> new EntityNotFoundException("Contract not found"));
+
+        existing.setContractNumber(contract.getContractNumber());
+        existing.setTitle(contract.getTitle());
+        existing.setCounterpartyName(contract.getCounterpartyName());
+        existing.setAgreedDeliveryDate(contract.getAgreedDeliveryDate());
+        existing.setBaseContractValue(contract.getBaseContractValue());
+        existing.setStatus(contract.getStatus());
+
         return contractRepository.save(existing);
     }
-    
+
     @Override
     public Contract getContractById(Long id) {
         return contractRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Contract not found"));
     }
-    
+
     @Override
     public List<Contract> getAllContracts() {
         return contractRepository.findAll();
     }
-    
+
     @Override
     public void updateContractStatus(Long contractId) {
-        Contract contract = getContractById(contractId);
-        Optional<DeliveryRecord> latestDelivery = deliveryRecordRepository.findFirstByContractIdOrderByDeliveryDateDesc(contractId);
-        
-        if (latestDelivery.isPresent()) {
-            LocalDate deliveryDate = latestDelivery.get().getDeliveryDate();
-            if (deliveryDate.isAfter(contract.getAgreedDeliveryDate())) {
-                contract.setStatus("BREACHED");
-            } else {
-                contract.setStatus("COMPLETED");
-            }
-        } else {
-            contract.setStatus("ACTIVE");
-        }
-        
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new EntityNotFoundException("Contract not found"));
+
+        contract.setStatus("UPDATED");
         contractRepository.save(contract);
     }
 }
