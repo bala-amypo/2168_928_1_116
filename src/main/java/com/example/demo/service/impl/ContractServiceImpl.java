@@ -29,7 +29,6 @@ public class ContractServiceImpl implements ContractService {
         if (contract.getBaseContractValue() == null ||
                 contract.getBaseContractValue().compareTo(BigDecimal.ZERO) <= 0) {
 
-            // ⚠️ MESSAGE IS REQUIRED — test checks contains()
             throw new IllegalArgumentException("Base contract value must be positive");
         }
 

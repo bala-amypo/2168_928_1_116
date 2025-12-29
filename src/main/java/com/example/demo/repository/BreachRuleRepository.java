@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BreachRuleRepository extends JpaRepository<BreachRule, Long> {
 
-    // ⚠️ EXACT NAME REQUIRED BY TESTS
     Optional<BreachRule> findFirstByActiveTrueOrderByIsDefaultRuleDesc();
 }

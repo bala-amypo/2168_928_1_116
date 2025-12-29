@@ -40,7 +40,6 @@ public class User {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
 
-        // SAFETY NET: never allow null roles
         if (roles == null) {
             roles = new HashSet<>();
         }

@@ -24,7 +24,6 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // REQUIRED FOR TESTS
     public AuthServiceImpl() {}
 
     @Override
