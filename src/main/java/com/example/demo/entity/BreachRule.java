@@ -25,6 +25,5 @@ public class BreachRule {
 
     private Boolean active;
 
-    // ⚠️ DO NOT CHANGE THIS NAME — TESTS EXPECT IT
     private Boolean isDefaultRule;
 }

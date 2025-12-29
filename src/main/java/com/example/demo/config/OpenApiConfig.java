@@ -18,7 +18,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                // 🔑 FORCE HTTPS FOR SWAGGER (browser-safe)
+                
                 .servers(List.of(
                         new Server().url("https://9182.408procr.amypo.ai")
                 ))
