@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 public class PenaltyCalculationServiceImpl implements PenaltyCalculationService {
 
-    // 🔴 ALL FIELD NAMES MUST MATCH TESTS
     private ContractRepository contractRepository;
     private DeliveryRecordRepository deliveryRecordRepository;
     private BreachRuleRepository breachRuleRepository;

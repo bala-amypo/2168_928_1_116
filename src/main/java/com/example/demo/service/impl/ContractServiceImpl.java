@@ -15,13 +15,11 @@ import java.util.Optional;
 @Service
 public class ContractServiceImpl implements ContractService {
 
-    // REQUIRED for TestUtils.injectField
     ContractRepository contractRepository;
 
-    // REQUIRED for updateContractStatus tests
     DeliveryRecordRepository deliveryRecordRepository;
 
-    // REQUIRED no-args constructor
+    
     public ContractServiceImpl() {
     }
 
