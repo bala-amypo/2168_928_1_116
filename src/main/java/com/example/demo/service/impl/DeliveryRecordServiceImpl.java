@@ -13,11 +13,9 @@ import java.util.List;
 @Service
 public class DeliveryRecordServiceImpl implements DeliveryRecordService {
 
-    // 🔴 FIELD NAMES MUST MATCH TESTS EXACTLY
     private DeliveryRecordRepository deliveryRecordRepository;
     private ContractRepository contractRepository;
 
-    // 🔴 DEFAULT CONSTRUCTOR REQUIRED FOR REFLECTION
     public DeliveryRecordServiceImpl() {
     }
 

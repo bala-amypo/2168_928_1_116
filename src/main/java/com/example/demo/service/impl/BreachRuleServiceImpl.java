@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class BreachRuleServiceImpl implements BreachRuleService {
 
-    // REQUIRED for TestUtils.injectField
+   
     BreachRuleRepository breachRuleRepository;
 
     public BreachRuleServiceImpl() {
@@ -81,7 +81,7 @@ public class BreachRuleServiceImpl implements BreachRuleService {
             return active.get();
         }
 
-        // 🔥 TEST EXPECTS EXCEPTION — NOT NULL, NOT NEW OBJECT
+        
         throw new RuntimeException("No active breach rule");
     }
 }

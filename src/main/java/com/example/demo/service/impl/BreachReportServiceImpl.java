@@ -15,12 +15,10 @@ import java.util.List;
 @Service
 public class BreachReportServiceImpl implements BreachReportService {
 
-    // 🔴 FIELD NAMES MUST MATCH TESTS
     private ContractRepository contractRepository;
     private PenaltyCalculationRepository penaltyCalculationRepository;
     private BreachReportRepository breachReportRepository;
 
-    // 🔴 REQUIRED FOR REFLECTION
     public BreachReportServiceImpl() {
     }
 
