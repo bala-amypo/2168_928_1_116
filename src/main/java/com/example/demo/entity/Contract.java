@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.ContractStatus;
 import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,23 +11,30 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "contracts")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String contractNumber;
 
     private String title;
     private String counterpartyName;
+
+    @Column(nullable = false)
     private LocalDate agreedDeliveryDate;
+
+    @Column(nullable = false)
     private BigDecimal baseContractValue;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContractStatus status;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -33,13 +42,13 @@ public class Contract {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreate() {
+    void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void onUpdate() {
+    void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
 }
