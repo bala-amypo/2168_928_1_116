@@ -11,19 +11,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BreachRule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
+    
+    @Column(unique = true)
     private String ruleName;
-
+    
     private BigDecimal penaltyPerDay;
-
     private Double maxPenaltyPercentage;
-
     private Boolean active;
-
     private Boolean isDefaultRule;
 }
